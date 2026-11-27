@@ -1,0 +1,134 @@
+{
+  "metadata": {
+    "version": "0.1-cp2",
+    "updated_date": "2026-11-27",
+    "purpose": "Bộ quy tắc tất định để phát hiện tên miền giả mạo và dấu hiệu lừa đảo phổ biến trong tin nhắn tài chính/ngân hàng/ví điện tử."
+  },
+  "domain_rules": [
+    {
+      "id": "R_SHORTENER",
+      "severity": "high",
+      "description": "Sử dụng đường dẫn rút gọn che giấu tên miền đích.",
+      "shortener_domains": [
+        "bit.ly",
+        "tinyurl.com",
+        "t.ly",
+        "cutt.ly",
+        "rb.gy",
+        "rebrand.ly",
+        "is.gd",
+        "bom.so",
+        "s.net.vn",
+        "by.com.vn",
+        "shorturl.at",
+        "goo.gl"
+      ]
+    },
+    {
+      "id": "R_RAW_IP",
+      "severity": "high",
+      "description": "Đường dẫn trỏ trực tiếp tới địa chỉ IP thay vì tên miền chính thức (vd: http://103.x.x.x/...)."
+    },
+    {
+      "id": "R_NO_HTTPS",
+      "severity": "medium",
+      "description": "Đường dẫn sử dụng giao thức http:// không mã hóa thay vì https://."
+    },
+    {
+      "id": "R_PUNYCODE",
+      "severity": "high",
+      "description": "Tên miền chứa mã punycode (xn--) có nguy cơ giả mạo bằng ký tự đồng dạng (homograph)."
+    },
+    {
+      "id": "R_SUSPICIOUS_TLD",
+      "severity": "high",
+      "description": "Tên miền sử dụng đuôi mở rộng thường bị lạm dụng cho trang lừa đảo, không khớp tên miền chính thức ngân hàng/ví.",
+      "suspicious_tlds": [
+        ".xyz",
+        ".top",
+        ".click",
+        ".vip",
+        ".site",
+        ".online",
+        ".icu",
+        ".club",
+        ".buzz",
+        ".info",
+        ".tk",
+        ".ml",
+        ".ga",
+        ".cf",
+        ".gq",
+        ".cc",
+        ".pro",
+        ".shop"
+      ]
+    },
+    {
+      "id": "R_BRAND_IN_SUBDOMAIN_OR_LOOKALIKE",
+      "severity": "high",
+      "description": "Tên thương hiệu ngân hàng/ví xuất hiện trong subdomain hoặc ghép thêm từ khóa nhưng tên miền gốc không thuộc official_domains (vd: vietcombank.com-vn.xyz, verify-momo.top).",
+      "lookalike_keywords": [
+        "verify",
+        "xacminh",
+        "xac-minh",
+        "support",
+        "hotro",
+        "ho-tro",
+        "secure",
+        "baomat",
+        "login",
+        "dangnhap",
+        "update",
+        "capnhat",
+        "unlock",
+        "mokhoa",
+        "banking",
+        "digibank",
+        "smartbanking",
+        "cskh"
+      ]
+    },
+    {
+      "id": "R_DOMAIN_MISMATCH",
+      "severity": "high",
+      "description": "Tin nhắn nhắc tới tổ chức có trong danh bạ chính thức nhưng tên miền trong URL không khớp với bất kỳ official_domains nào của tổ chức đó."
+    },
+    {
+      "id": "R_APK_OR_EXECUTABLE",
+      "severity": "high",
+      "description": "Đường dẫn hoặc nội dung yêu cầu tải/cài tệp ứng dụng ngoài kho chính thức (.apk, .exe, .zip).",
+      "extensions": [".apk", ".exe", ".msi", ".zip", ".rar"]
+    }
+  ],
+  "content_signal_rules": [
+    {
+      "id": "S_SENSITIVE_CREDENTIALS",
+      "severity": "high",
+      "description": "Yêu cầu cung cấp mã OTP, mật khẩu, mã PIN, số CVV hoặc đăng nhập qua đường dẫn lạ.",
+      "keywords": ["otp", "mã xác thực", "mật khẩu", "password", "mã pin", "cvv", "đăng nhập ngay", "xác thực tài khoản"]
+    },
+    {
+      "id": "S_URGENCY_PRESSURE",
+      "severity": "medium",
+      "description": "Tạo áp lực thời gian gấp để ép người dùng thao tác ngay mà không kịp kiểm chứng.",
+      "keywords": ["khẩn cấp", "ngay lập tức", "trong 24h", "trong 2 giờ", "sắp bị khóa", "tạm khóa", "đình chỉ tài khoản", "hủy dịch vụ", "truy thu"]
+    },
+    {
+      "id": "S_TRANSFER_REQUEST",
+      "severity": "high",
+      "description": "Yêu cầu chuyển tiền để xác minh, mở khóa, nhận thưởng, hoàn tiền hoặc giữ tài khoản.",
+      "keywords": ["chuyển tiền", "chuyển khoản", "nạp tiền xác minh", "phí mở khóa", "nhận thưởng", "hoàn tiền", "stk"]
+    },
+    {
+      "id": "S_INSTALL_APP",
+      "severity": "high",
+      "description": "Yêu cầu tải ứng dụng qua link lạ hoặc cài file APK (dịch vụ công giả, cập nhật sinh trắc học giả).",
+      "keywords": ["tải app", "cài đặt apk", ".apk", "cập nhật sinh trắc học", "nâng cấp bảo mật"]
+    }
+  ],
+  "security_notes": [
+    "Tên người gửi SMS (SMS Brandname) vẫn có thể bị giả mạo qua trạm phát sóng giả (fake BTS); không được kết luận an toàn chỉ dựa vào tên hiển thị.",
+    "Ngân hàng và ví điện tử chính thức không yêu cầu người dùng cung cấp mật khẩu, mã PIN, mã OTP hoặc bấm link lạ để cập nhật thông tin."
+  ]
+}
