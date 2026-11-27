@@ -4,6 +4,22 @@
 
 Mục tiêu: `call_model()` trong `codebase/ai.py` gọi model thật và trả về câu trả lời kèm **số token** đo được. Prompt và luồng là phần nhóm tự viết trong `codebase/agent.py`. File này chỉ lo phần kết nối.
 
+## Cấu hình đang dùng của F4VSB
+
+Chép `.env.example` thành `.env` tại gốc repo. Điền key của nhóm sau `API_KEY=` và giữ file này trên máy chạy demo.
+
+```dotenv
+MODEL_PROVIDER=deepseek
+MODEL_NAME=deepseek-flash
+API_KEY=
+```
+
+Chạy `python run.py eval --try` để kiểm kết nối. Khi tên `deepseek-flash` và số token vào/ra xuất hiện, chạy `python run.py eval` để đánh giá toàn bộ. Dùng `MODEL_PROVIDER=fake` để chạy demo giả.
+
+Công cụ phân tích SMS cục bộ. API nhận tên tổ chức đã tra, các mã quy tắc đã khớp, lý do cố định của từng quy tắc và hai cờ cho biết có người gửi hoặc URL. DeepSeek trả một trong hai nhãn bằng JSON. `tokens_in` và `tokens_out` lấy từ `usage` của [DeepSeek Chat Completions](https://api-docs.deepseek.com/api/create-chat-completion/).
+
+## Tham khảo khi đổi nhà cung cấp
+
 Ba ví dụ dưới đây (OpenAI, Claude, Ollama) **đã chạy với key thật ngày 25/11/2026**: chép vào là chạy.
 
 ## 1. Điền `.env`
