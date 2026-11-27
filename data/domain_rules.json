@@ -1,14 +1,14 @@
 {
   "metadata": {
-    "version": "0.1-cp2",
+    "version": "0.2-cp2-sms",
     "updated_date": "2026-11-27",
-    "purpose": "Bộ quy tắc tất định để phát hiện tên miền giả mạo và dấu hiệu lừa đảo phổ biến trong tin nhắn tài chính/ngân hàng/ví điện tử."
+    "purpose": "Bộ quy tắc tất định để phát hiện tên miền giả mạo, đầu số người gửi đáng ngờ và dấu hiệu lừa đảo phổ biến trong tin nhắn SMS ngân hàng/ví điện tử."
   },
   "domain_rules": [
     {
       "id": "R_SHORTENER",
       "severity": "high",
-      "description": "Sử dụng đường dẫn rút gọn che giấu tên miền đích.",
+      "description": "Tin nhắn SMS sử dụng đường dẫn rút gọn để che giấu tên miền đích.",
       "shortener_domains": [
         "bit.ly",
         "tinyurl.com",
@@ -27,12 +27,12 @@
     {
       "id": "R_RAW_IP",
       "severity": "high",
-      "description": "Đường dẫn trỏ trực tiếp tới địa chỉ IP thay vì tên miền chính thức (vd: http://103.x.x.x/...)."
+      "description": "Đường dẫn trong SMS trỏ trực tiếp tới địa chỉ IP thay vì tên miền chính thức (vd: http://103.x.x.x/...)."
     },
     {
       "id": "R_NO_HTTPS",
       "severity": "medium",
-      "description": "Đường dẫn sử dụng giao thức http:// không mã hóa thay vì https://."
+      "description": "Đường dẫn trong SMS sử dụng giao thức http:// không mã hóa thay vì https://."
     },
     {
       "id": "R_PUNYCODE",
@@ -42,7 +42,7 @@
     {
       "id": "R_SUSPICIOUS_TLD",
       "severity": "high",
-      "description": "Tên miền sử dụng đuôi mở rộng thường bị lạm dụng cho trang lừa đảo, không khớp tên miền chính thức ngân hàng/ví.",
+      "description": "Tên miền sử dụng đuôi mở rộng thường bị lạm dụng cho trang lừa đảo qua SMS, không khớp tên miền chính thức ngân hàng/ví.",
       "suspicious_tlds": [
         ".xyz",
         ".top",
@@ -92,43 +92,61 @@
     {
       "id": "R_DOMAIN_MISMATCH",
       "severity": "high",
-      "description": "Tin nhắn nhắc tới tổ chức có trong danh bạ chính thức nhưng tên miền trong URL không khớp với bất kỳ official_domains nào của tổ chức đó."
+      "description": "Tin nhắn SMS nhắc tới tổ chức có trong danh bạ chính thức nhưng tên miền trong URL không khớp với bất kỳ official_domains nào của tổ chức đó."
     },
     {
       "id": "R_APK_OR_EXECUTABLE",
       "severity": "high",
-      "description": "Đường dẫn hoặc nội dung yêu cầu tải/cài tệp ứng dụng ngoài kho chính thức (.apk, .exe, .zip).",
+      "description": "Đường dẫn trong SMS yêu cầu tải/cài tệp ứng dụng ngoài kho chính thức (.apk, .exe, .zip).",
       "extensions": [".apk", ".exe", ".msi", ".zip", ".rar"]
+    }
+  ],
+  "sms_sender_rules": [
+    {
+      "id": "R_SMS_PERSONAL_SENDER",
+      "severity": "high",
+      "description": "Tin nhắn tự xưng là ngân hàng/ví điện tử nhưng gửi từ số di động cá nhân (03x, 05x, 07x, 08x, 09x, +84...) hoặc đầu số lạ thay vì SMS Brandname chính thức.",
+      "personal_prefix_regex": "^(\\+?84|0)(3|5|7|8|9)\\d{8}$"
+    },
+    {
+      "id": "R_SMS_LOOKALIKE_BRANDNAME",
+      "severity": "high",
+      "description": "Tên hiển thị người gửi SMS biến tấu gần giống Brandname thật (vd: thay chữ O bằng số 0, chữ I bằng số 1/chữ l, thêm dấu chấm hoặc hậu tố như VCB-VN, BIDV_CSKH)."
+    },
+    {
+      "id": "R_SMS_FAKE_BTS",
+      "severity": "high",
+      "description": "Tên người gửi trùng khớp sms_brandnames chính thức (nằm chung luồng tin nhắn thật trên điện thoại do trạm phát sóng giả fake BTS), nhưng nội dung SMS lại chứa link ngoài official_domains, link rút gọn hoặc yêu cầu nhập OTP/mật khẩu."
     }
   ],
   "content_signal_rules": [
     {
       "id": "S_SENSITIVE_CREDENTIALS",
       "severity": "high",
-      "description": "Yêu cầu cung cấp mã OTP, mật khẩu, mã PIN, số CVV hoặc đăng nhập qua đường dẫn lạ.",
+      "description": "SMS yêu cầu cung cấp mã OTP, mật khẩu, mã PIN, số CVV hoặc đăng nhập qua đường dẫn đính kèm.",
       "keywords": ["otp", "mã xác thực", "mật khẩu", "password", "mã pin", "cvv", "đăng nhập ngay", "xác thực tài khoản"]
     },
     {
       "id": "S_URGENCY_PRESSURE",
       "severity": "medium",
-      "description": "Tạo áp lực thời gian gấp để ép người dùng thao tác ngay mà không kịp kiểm chứng.",
-      "keywords": ["khẩn cấp", "ngay lập tức", "trong 24h", "trong 2 giờ", "sắp bị khóa", "tạm khóa", "đình chỉ tài khoản", "hủy dịch vụ", "truy thu"]
+      "description": "SMS tạo áp lực thời gian gấp hoặc dọa khóa thẻ/tài khoản, trừ phí để ép người dùng thao tác ngay.",
+      "keywords": ["khẩn cấp", "ngay lập tức", "trong 24h", "trong 2 giờ", "sắp bị khóa", "tạm khóa", "đình chỉ tài khoản", "hủy dịch vụ", "truy thu", "phí thường niên"]
     },
     {
       "id": "S_TRANSFER_REQUEST",
       "severity": "high",
-      "description": "Yêu cầu chuyển tiền để xác minh, mở khóa, nhận thưởng, hoàn tiền hoặc giữ tài khoản.",
+      "description": "SMS yêu cầu chuyển tiền để xác minh, mở khóa, nhận thưởng, hoàn tiền hoặc tất toán.",
       "keywords": ["chuyển tiền", "chuyển khoản", "nạp tiền xác minh", "phí mở khóa", "nhận thưởng", "hoàn tiền", "stk"]
     },
     {
       "id": "S_INSTALL_APP",
       "severity": "high",
-      "description": "Yêu cầu tải ứng dụng qua link lạ hoặc cài file APK (dịch vụ công giả, cập nhật sinh trắc học giả).",
-      "keywords": ["tải app", "cài đặt apk", ".apk", "cập nhật sinh trắc học", "nâng cấp bảo mật"]
+      "description": "SMS yêu cầu tải ứng dụng qua link lạ hoặc cài file APK (cập nhật sinh trắc học giả, nâng cấp bảo mật giả).",
+      "keywords": ["tải app", "cài đặt apk", ".apk", "cập nhật sinh trắc học", "nâng cấp bảo mật", "đổi điểm thưởng"]
     }
   ],
   "security_notes": [
-    "Tên người gửi SMS (SMS Brandname) vẫn có thể bị giả mạo qua trạm phát sóng giả (fake BTS); không được kết luận an toàn chỉ dựa vào tên hiển thị.",
-    "Ngân hàng và ví điện tử chính thức không yêu cầu người dùng cung cấp mật khẩu, mã PIN, mã OTP hoặc bấm link lạ để cập nhật thông tin."
+    "Tên người gửi SMS (SMS Brandname) vẫn có thể bị giả mạo qua trạm phát sóng giả (fake BTS) và nằm chung luồng tin nhắn thật trên điện thoại; tuyệt đối không kết luận an toàn chỉ dựa vào tên hiển thị người gửi.",
+    "Ngân hàng và ví điện tử chính thức không bao giờ gửi SMS kèm đường dẫn yêu cầu nhập mật khẩu, mã PIN, mã OTP hoặc tải file .apk."
   ]
 }

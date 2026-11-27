@@ -8,22 +8,22 @@
 
 | | |
 |---|---|
-| Dùng để làm gì | Nguồn căn cứ cho công cụ `lookup_official_channels` (đối chiếu tên miền, hotline, email hỗ trợ chính thức và sinh hướng dẫn tự xác minh). |
+| Dùng để làm gì | Nguồn căn cứ cho công cụ `lookup_official_channels` khi kiểm tra tin nhắn SMS (đối chiếu `sms_brandnames`, `official_domains` xuất hiện trong nội dung SMS, và cung cấp `official_hotlines` để người dùng tự gọi xác minh). |
 | Từ đâu | Tổng hợp trực tiếp từ trang chủ / mục Liên hệ chính thức của 10 tổ chức tại Việt Nam: Vietcombank (`vietcombank.com.vn`), BIDV (`bidv.com.vn`), VietinBank (`vietinbank.vn`), Techcombank (`techcombank.com`), MB Bank (`mbbank.com.vn`), VPBank (`vpbank.com.vn`), ACB (`acb.com.vn`), Agribank (`agribank.com.vn`), MoMo (`momo.vn`), ZaloPay (`zalopay.vn`). |
-| Xử lý những bước gì | Tra cứu tên miền gốc, số hotline CSKH 24/7 và email hỗ trợ từ nguồn chính thức → chuẩn hóa sang JSON có cấu trúc gồm `aliases`, `official_domains`, `official_hotlines`, `official_emails`, `verify_guidance`, `source_url`, `verified_date`. Không chứa dữ liệu cá nhân. |
+| Xử lý những bước gì | Tra cứu tên miền gốc, tên hiển thị SMS Brandname phổ biến, số hotline CSKH 24/7 và email hỗ trợ từ nguồn chính thức → chuẩn hóa sang JSON gồm `aliases`, `sms_brandnames`, `official_domains`, `official_hotlines`, `official_emails`, `verify_guidance`, `source_url`, `verified_date`. Không chứa dữ liệu cá nhân. |
 | Số dòng / số đoạn | 10 tổ chức (8 ngân hàng thương mại + 2 ví điện tử). |
-| Phiên bản / ngày lấy | `v0.1-cp2` · 27/11/2026 (Trần Việt Thịnh phụ trách rà soát nguồn). |
+| Phiên bản / ngày lấy | `v0.2-cp2-sms` · 27/11/2026 (Trần Việt Thịnh phụ trách rà soát nguồn). |
 | Nhãn | thật (thông tin công khai từ kênh chính thức). |
-| Giới hạn | Mới phủ 10 ngân hàng/ví phổ biến nhất, chưa phủ toàn bộ các ngân hàng nhỏ, công ty tài chính hay dịch vụ công; các hotline/tên miền có thể thay đổi theo thời gian. Với tổ chức ngoài danh bạ, hệ thống phải báo chưa có dữ liệu để đối chiếu (nguyên tắc G10) thay vì tự đoán. |
+| Giới hạn | Mới phủ 10 ngân hàng/ví phổ biến nhất, chưa phủ toàn bộ các ngân hàng nhỏ, công ty tài chính hay dịch vụ công; các hotline/tên miền có thể thay đổi theo thời gian. Đặc biệt với kênh SMS, `sms_brandnames` vẫn có thể bị giả mạo qua trạm phát sóng giả (fake BTS), nên không dùng `sms_brandnames` làm bằng chứng duy nhất để kết luận an toàn. Với tổ chức ngoài danh bạ, hệ thống phải báo chưa có dữ liệu để đối chiếu (nguyên tắc G10). |
 
-## Dataset 2 · Bộ quy tắc tên miền giả & dấu hiệu rủi ro (`data/domain_rules.json`)
+## Dataset 2 · Bộ quy tắc tên miền giả, người gửi SMS & dấu hiệu rủi ro (`data/domain_rules.json`)
 
 | | |
 |---|---|
-| Dùng để làm gì | Nguồn quy tắc tất định cho công cụ `check_domain_rules` và `extract_message_signals` (phát hiện link rút gọn, IP trần, HTTP không mã hóa, punycode, đuôi tên miền rủi ro cao, giả mạo thương hiệu trong subdomain/lookalike, tệp `.apk`, và từ khóa yêu cầu OTP/chuyển tiền/thúc ép khẩn cấp). |
-| Từ đâu | Nhóm tự biên soạn dựa trên khuyến cáo an toàn thông tin phổ biến của các ngân hàng/ví điện tử (không thu thập dữ liệu cá nhân). |
-| Xử lý những bước gì | Phân tách thành 2 nhóm quy tắc độc lập: `domain_rules` (8 quy tắc URL/tên miền, gán mức `medium`/`high`) và `content_signal_rules` (4 nhóm tín hiệu nội dung). Bổ sung `security_notes` về rủi ro giả mạo SMS Brandname (fake BTS). |
-| Số dòng / số đoạn | 8 quy tắc tên miền/URL + 4 nhóm quy tắc tín hiệu nội dung + 2 ghi chú bảo mật. |
-| Phiên bản / ngày lấy | `v0.1-cp2` · 27/11/2026. |
+| Dùng để làm gì | Nguồn quy tắc tất định cho công cụ `check_domain_rules` và `extract_message_signals` chuyên sâu cho tin nhắn SMS (phát hiện link rút gọn, IP trần, HTTP không mã hóa, punycode, đuôi tên miền rủi ro cao, giả mạo thương hiệu trong subdomain/lookalike, tệp `.apk`, đầu số di động cá nhân giả danh ngân hàng, bẫy trạm BTS giả mạo SMS Brandname, và từ khóa đòi OTP/chuyển tiền/đổi điểm thưởng/cập nhật sinh trắc học). |
+| Từ đâu | Nhóm tự biên soạn dựa trên khuyến cáo cảnh báo lừa đảo SMS Brandname của các ngân hàng/ví điện tử tại Việt Nam (không thu thập dữ liệu cá nhân). |
+| Xử lý những bước gì | Phân tách thành 3 nhóm quy tắc độc lập: `domain_rules` (8 quy tắc URL/tên miền), `sms_sender_rules` (3 quy tắc đặc thù người gửi SMS gồm số di động cá nhân, Brandname biến tấu, và cảnh báo fake BTS), và `content_signal_rules` (4 nhóm tín hiệu nội dung SMS). |
+| Số dòng / số đoạn | 8 quy tắc tên miền/URL + 3 quy tắc người gửi SMS + 4 nhóm quy tắc tín hiệu nội dung + 2 ghi chú bảo mật. |
+| Phiên bản / ngày lấy | `v0.2-cp2-sms` · 27/11/2026. |
 | Nhãn | nhóm tự biên soạn (quy tắc kiểm tra tất định, không phải bằng chứng pain). |
-| Giới hạn | Quy tắc từ khóa và danh sách TLD/link rút gọn có thể bỏ sót thủ đoạn mới hoặc cảnh báo nhầm (false positive) với một số chiến dịch rút gọn link hợp pháp. Vì vậy hệ thống luôn giải thích lý do cụ thể và hướng dẫn người dùng tự kiểm tra qua kênh chính thức, không tự khẳng định 100%. |
+| Giới hạn | Quy tắc từ khóa và danh sách TLD/link rút gọn có thể bỏ sót thủ đoạn biến tấu chữ mới hoặc cảnh báo thận trọng với SMS quảng cáo hợp lệ có dùng link rút gọn. Vì vậy hệ thống luôn nêu rõ từng quy tắc bị kích hoạt và hướng dẫn người dùng tự kiểm tra qua ứng dụng/hotline chính thức, không tự khẳng định 100%. |
