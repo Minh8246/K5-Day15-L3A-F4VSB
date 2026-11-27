@@ -1,9 +1,9 @@
 {
   "metadata": {
-    "version": "0.1-cp2",
+    "version": "0.2-cp2-sms",
     "verified_date": "2026-11-27",
-    "scope": "Danh bạ kênh chính thức của 10 ngân hàng và ví điện tử phổ biến tại Việt Nam dùng để đối chiếu tên miền, hotline và email hỗ trợ.",
-    "note": "Tên miền con hợp lệ của official_domains (vd: sub.vietcombank.com.vn) được xem là cùng tổ chức; các tổ chức không có trong danh sách này phải trả trạng thái chưa có dữ liệu (nguyên tắc G10)."
+    "scope": "Danh bạ kênh chính thức của 10 ngân hàng và ví điện tử phổ biến tại Việt Nam dùng để đối chiếu tin nhắn SMS (SMS Brandname, tên miền trong nội dung SMS và hotline xác minh).",
+    "note": "Tên miền con hợp lệ của official_domains (vd: sub.vietcombank.com.vn) được xem là cùng tổ chức. Lưu ý đặc thù SMS: kẻ gian có thể dùng trạm phát sóng giả (fake BTS) để giả mạo đúng sms_brandnames, nên luôn phải đối chiếu tên miền trong nội dung SMS với official_domains. Các tổ chức không có trong danh sách này phải trả trạng thái chưa có dữ liệu (nguyên tắc G10)."
   },
   "organizations": [
     {
@@ -12,10 +12,11 @@
       "full_name": "Ngân hàng TMCP Ngoại thương Việt Nam",
       "type": "bank",
       "aliases": ["vcb", "vietcombank", "vcb digibank", "ngoại thương"],
+      "sms_brandnames": ["Vietcombank", "VCB"],
       "official_domains": ["vietcombank.com.vn"],
       "official_hotlines": ["1900 54 54 13", "1800 15 65", "+84 24 3824 3524", "+84 24 3824 5716"],
       "official_emails": ["lienhe@vietcombank.com.vn"],
-      "verify_guidance": "Không bấm link trong tin nhắn. Mở trực tiếp ứng dụng VCB Digibank hoặc gọi tổng đài 1900 54 54 13 (24/7) để kiểm tra.",
+      "verify_guidance": "Không bấm link trong SMS. Mở trực tiếp ứng dụng VCB Digibank hoặc gọi tổng đài 1900 54 54 13 (24/7) để kiểm tra.",
       "source_url": "https://www.vietcombank.com.vn",
       "verified_date": "2026-11-27"
     },
@@ -25,10 +26,11 @@
       "full_name": "Ngân hàng TMCP Đầu tư và Phát triển Việt Nam",
       "type": "bank",
       "aliases": ["bidv", "bidv smartbanking", "đầu tư và phát triển"],
+      "sms_brandnames": ["BIDV"],
       "official_domains": ["bidv.com.vn"],
       "official_hotlines": ["1900 9247", "1900 9248", "1800 96 96 59", "+84 24 2220 0588"],
       "official_emails": ["bidv247@bidv.com.vn"],
-      "verify_guidance": "Không bấm link trong tin nhắn. Mở trực tiếp ứng dụng BIDV SmartBanking hoặc gọi tổng đài 1900 9247 (24/7) để xác minh.",
+      "verify_guidance": "Không bấm link trong SMS. Mở trực tiếp ứng dụng BIDV SmartBanking hoặc gọi tổng đài 1900 9247 (24/7) để xác minh.",
       "source_url": "https://bidv.com.vn",
       "verified_date": "2026-11-27"
     },
@@ -38,10 +40,11 @@
       "full_name": "Ngân hàng TMCP Công Thương Việt Nam",
       "type": "bank",
       "aliases": ["vietinbank", "vietin", "ctg", "vietinbank ipay", "công thương"],
+      "sms_brandnames": ["VietinBank"],
       "official_domains": ["vietinbank.vn", "contact.vietinbank.vn"],
       "official_hotlines": ["1900 558 868", "1900 558 886", "1800 558 866", "+84 24 3941 8868"],
       "official_emails": ["contact@vietinbank.vn"],
-      "verify_guidance": "Không bấm link trong tin nhắn. Mở trực tiếp ứng dụng VietinBank iPay hoặc gọi tổng đài 1900 558 868 để kiểm tra.",
+      "verify_guidance": "Không bấm link trong SMS. Mở trực tiếp ứng dụng VietinBank iPay hoặc gọi tổng đài 1900 558 868 để kiểm tra.",
       "source_url": "https://vietinbank.vn",
       "verified_date": "2026-11-27"
     },
@@ -51,10 +54,11 @@
       "full_name": "Ngân hàng TMCP Kỹ Thương Việt Nam",
       "type": "bank",
       "aliases": ["techcombank", "tcb", "techcom", "kỹ thương"],
+      "sms_brandnames": ["Techcombank", "TCB"],
       "official_domains": ["techcombank.com", "techcombank.com.vn"],
       "official_hotlines": ["1800 588 822", "1800 6556", "+84 24 3944 6699", "+84 24 7303 6556"],
       "official_emails": ["hotrodoanhnghiep@techcombank.com.vn"],
-      "verify_guidance": "Không bấm link trong tin nhắn. Mở trực tiếp ứng dụng Techcombank Mobile hoặc gọi tổng đài miễn phí 1800 588 822 để xác minh.",
+      "verify_guidance": "Không bấm link trong SMS. Mở trực tiếp ứng dụng Techcombank Mobile hoặc gọi tổng đài miễn phí 1800 588 822 để xác minh.",
       "source_url": "https://techcombank.com",
       "verified_date": "2026-11-27"
     },
@@ -64,10 +68,11 @@
       "full_name": "Ngân hàng TMCP Quân đội",
       "type": "bank",
       "aliases": ["mb", "mbbank", "mb bank", "ngân hàng quân đội"],
+      "sms_brandnames": ["MBBANK", "MB"],
       "official_domains": ["mbbank.com.vn"],
       "official_hotlines": ["1900 545 426", "+84 24 3767 4050"],
       "official_emails": ["mb247@mbbank.com.vn"],
-      "verify_guidance": "Không bấm link trong tin nhắn. Mở trực tiếp ứng dụng MBBank hoặc gọi tổng đài 1900 545 426 (24/7) để xác minh.",
+      "verify_guidance": "Không bấm link trong SMS. Mở trực tiếp ứng dụng MBBank hoặc gọi tổng đài 1900 545 426 (24/7) để xác minh.",
       "source_url": "https://www.mbbank.com.vn",
       "verified_date": "2026-11-27"
     },
@@ -77,10 +82,11 @@
       "full_name": "Ngân hàng TMCP Việt Nam Thịnh Vượng",
       "type": "bank",
       "aliases": ["vpbank", "vpb", "vpbank neo", "việt nam thịnh vượng"],
+      "sms_brandnames": ["VPBank"],
       "official_domains": ["vpbank.com.vn"],
       "official_hotlines": ["1900 545 415", "1800 545 415", "1900 234 568"],
       "official_emails": ["chamsockhachhang@vpbank.com.vn", "customercare@vpbank.com.vn"],
-      "verify_guidance": "Không bấm link trong tin nhắn. Mở trực tiếp ứng dụng VPBank NEO hoặc gọi tổng đài 1900 545 415 (24/7) để kiểm tra.",
+      "verify_guidance": "Không bấm link trong SMS. Mở trực tiếp ứng dụng VPBank NEO hoặc gọi tổng đài 1900 545 415 (24/7) để kiểm tra.",
       "source_url": "https://www.vpbank.com.vn",
       "verified_date": "2026-11-27"
     },
@@ -90,10 +96,11 @@
       "full_name": "Ngân hàng TMCP Á Châu",
       "type": "bank",
       "aliases": ["acb", "acb one", "á châu"],
+      "sms_brandnames": ["ACB"],
       "official_domains": ["acb.com.vn"],
       "official_hotlines": ["1900 54 54 86", "028 38 247 247"],
       "official_emails": ["acb@acb.com.vn"],
-      "verify_guidance": "Không bấm link trong tin nhắn. Mở trực tiếp ứng dụng ACB ONE hoặc gọi tổng đài 1900 54 54 86 / (028) 38 247 247 để xác minh.",
+      "verify_guidance": "Không bấm link trong SMS. Mở trực tiếp ứng dụng ACB ONE hoặc gọi tổng đài 1900 54 54 86 / (028) 38 247 247 để xác minh.",
       "source_url": "https://acb.com.vn",
       "verified_date": "2026-11-27"
     },
@@ -103,10 +110,11 @@
       "full_name": "Ngân hàng Nông nghiệp và Phát triển Nông thôn Việt Nam",
       "type": "bank",
       "aliases": ["agribank", "agri", "agribank plus", "nông nghiệp"],
+      "sms_brandnames": ["Agribank"],
       "official_domains": ["agribank.com.vn"],
       "official_hotlines": ["1900 55 88 18", "+84 24 3205 3205"],
       "official_emails": ["cskh@agribank.com.vn"],
-      "verify_guidance": "Không bấm link trong tin nhắn. Mở trực tiếp ứng dụng Agribank Plus hoặc gọi tổng đài 1900 55 88 18 (24/7) để kiểm tra.",
+      "verify_guidance": "Không bấm link trong SMS. Mở trực tiếp ứng dụng Agribank Plus hoặc gọi tổng đài 1900 55 88 18 (24/7) để kiểm tra.",
       "source_url": "https://www.agribank.com.vn",
       "verified_date": "2026-11-27"
     },
@@ -116,10 +124,11 @@
       "full_name": "Ví điện tử MoMo (Công ty Cổ phần Dịch vụ Di động Trực tuyến)",
       "type": "ewallet",
       "aliases": ["momo", "ví momo", "vi momo"],
+      "sms_brandnames": ["MoMo"],
       "official_domains": ["momo.vn"],
       "official_hotlines": ["1900 54 54 41", "1900 636 652", "028 7306 5555", "028 9999 5555", "028 5555 5555", "028 8888 5555"],
       "official_emails": ["hotro@momo.vn", "merchant.care@momo.vn"],
-      "verify_guidance": "Không bấm link trong tin nhắn. Mở trực tiếp ứng dụng MoMo → mục Trợ giúp, hoặc gọi tổng đài 1900 54 54 41 (bấm phím 1 để khóa ví khẩn cấp).",
+      "verify_guidance": "Không bấm link trong SMS. Mở trực tiếp ứng dụng MoMo → mục Trợ giúp, hoặc gọi tổng đài 1900 54 54 41 (bấm phím 1 để khóa ví khẩn cấp).",
       "source_url": "https://momo.vn",
       "verified_date": "2026-11-27"
     },
@@ -129,10 +138,11 @@
       "full_name": "Ví điện tử ZaloPay (Công ty Cổ phần Zion)",
       "type": "ewallet",
       "aliases": ["zalopay", "zalo pay", "ví zalopay", "vi zalopay"],
+      "sms_brandnames": ["ZaloPay"],
       "official_domains": ["zalopay.vn"],
       "official_hotlines": ["1900 545 436", "028 7307 7068", "028 7307 5068"],
       "official_emails": ["hotro@zalopay.vn"],
-      "verify_guidance": "Không bấm link trong tin nhắn. Mở trực tiếp ứng dụng ZaloPay → Trung tâm Hỗ trợ, hoặc gọi tổng đài 1900 545 436 để xác minh.",
+      "verify_guidance": "Không bấm link trong SMS. Mở trực tiếp ứng dụng ZaloPay → Trung tâm Hỗ trợ, hoặc gọi tổng đài 1900 545 436 để xác minh.",
       "source_url": "https://zalopay.vn",
       "verified_date": "2026-11-27"
     }
