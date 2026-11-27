@@ -48,18 +48,32 @@ Hiện mới có một nguồn (phỏng vấn); khảo sát chưa mở nên chư
 ## 5. Kết luận
 
 Giả thuyết ở `evidence/hypothesis.md`: **phải đổi**. Đối chiếu tiêu chí "mình đúng nếu thấy":
-- "≥2/3 người kể được ≥1 lần trong tháng qua nhận tin mà **không chắc** thật hay giả" → **chưa đạt rõ**: P3 có (3 lần, lúc đầu không chắc); P2 có nhận 2 lần và mất 10–15' kiểm tra, nhưng file chưa ghi lúc đầu có chắc không; P1 không nhận lần nào trong tháng.
+- "≥2/3 người kể được ≥1 lần trong tháng qua nhận tin mà **không chắc** thật hay giả" → **không đạt (1/3)**: chỉ P3 lúc đầu không chắc; P2 nhận 2 lần nhưng **ngay từ đầu đã chắc là giả**, 10–15' chỉ để kiểm lại qua app; P1 không nhận lần nào trong tháng.
 - "≥1/3 người lần đó **không** kiểm qua kênh chính thức" → **đạt** (P3).
 
-Phần đúng: người dùng **không có sẵn kênh chính thức** (3/3 không nhớ số tổng đài) và **mất 10–60 phút** mới quyết định. Phần chưa thấy: bị đánh lừa bởi tên người gửi / tên miền dẫn tới bấm link (0/3). Pain nên viết lại theo hướng: *khi nhận tin yêu cầu thao tác tài khoản hoặc chuyển tiền, người dùng mất 10–60 phút tự xác minh, phải dựa vào người quen hoặc Google vì không nhớ kênh chính thức, và có lúc vẫn không chắc.*
+Phần đúng: người dùng **không nhớ kênh xác minh qua điện thoại** (3/3 không nhớ số tổng đài; chỉ P2 biết website và dùng app ngân hàng để kiểm) và **mất 10–60 phút** mới quyết định. Người có kênh chính thức sẵn trong máy (P2, app ngân hàng) quyết định nhanh nhất (~10–15'); người không dùng kênh chính thức (P3) phải hỏi người thân và tra mạng (~30'). Phần chưa thấy: bị đánh lừa bởi tên người gửi / tên miền dẫn tới bấm link (0/3); phần lớn **không chắc** thật hay giả (chỉ 1/3 — đa số tự nghi ngờ đúng ngay, cái tốn là thời gian kiểm lại). Pain nên viết lại theo hướng: *khi nhận tin yêu cầu thao tác tài khoản hoặc chuyển tiền, người dùng dù đã nghi ngờ vẫn mất 10–60 phút tự xác minh, phải dựa vào người quen, Google hoặc trí nhớ vì không nhớ kênh chính thức; người không có kênh chính thức sẵn có lúc vẫn không chắc (P3).*
 
-Điều vẫn chưa biết: tần suất và tỉ lệ "không chắc" trên mẫu lớn hơn (cần khảo sát ≥20); nhóm người lớn tuổi / ít dùng công nghệ có gặp pain nặng hơn không; P2 lúc đầu có chắc không. Tin nhắn mẫu: P2 và P3 đã gửi mỗi người 1 tin (chép trong file phỏng vấn), P1 chưa có.
+Điều vẫn chưa biết: tần suất và tỉ lệ "không chắc" trên mẫu lớn hơn (cần khảo sát ≥20); nhóm người lớn tuổi / ít dùng công nghệ có gặp pain nặng hơn không. Không liên lạc lại được P1–P3 nên không bổ sung thêm tin mẫu. Tin nhắn mẫu: P2 và P3 đã gửi mỗi người 1 tin (chép trong file phỏng vấn), P1 chưa có.
+
+## 6. Bàn giao cho CP3 (đã rà ngày 27/11/2026 — Vũ Quang Minh)
+
+**Đã đối chiếu:** 6 trích dẫn ở §3 có nguyên văn trong `P1.md`–`P3.md`; mọi số ở §2 (số lần/tháng, thời gian, 3/3 không nhớ tổng đài, 1/3 kiểm qua kênh chính thức, 0/3 bấm link, 2/3 người quen gặp tin giả) khớp mục "Số nghe được" và câu trả lời trong từng file.
+
+**Cho `spec.md` §1–§2 (Quân):**
+- Người dùng chính: nhân viên văn phòng dùng app ngân hàng + ví điện tử hằng ngày (n = 3, cùng vai).
+- Pain (không chữ AI): nhân viên văn phòng nhận SMS yêu cầu xác minh tài khoản / chuyển tiền — tự kiểm thật hay giả — không nhớ số tổng đài, phải dựa vào người quen, Google hoặc trí nhớ — dù đã nghi ngờ vẫn mất 10–60 phút mới yên tâm; 1/3 (P3) lúc đầu không chắc. **Đừng viết pain là "không phân biệt được thật/giả"** — chỉ 1/3 gặp điều đó.
+- Hôm nay giải bằng: xem tên người gửi + link, mở app ngân hàng (P2); hỏi người thân + tra mạng (P3); nhớ lại quy trình (P1). Chưa bỏ vì "cách quen thuộc, dễ thực hiện" (P2), "không cần biết trước số tổng đài" (P3).
+- Thừa số cho Impact §2 lấy từ phỏng vấn: **2/3** người có nhận tin trong tháng · **~2–3 lần / tháng** ở người có nhận (P2, P3) · **10–60 phút / lần**. Số người dùng tổng phải ghi *(tự ước tính)* hoặc có nguồn riêng — phỏng vấn không cho số này.
+
+**Cho `eval/benchmark.csv` (Thịnh):**
+- Tin mẫu của P2 → đã dùng ở **B09**; tin mẫu của P3 → đã dùng ở **B10**. Cả hai là SMS, khớp lát cắt.
+- Không còn tin nhắn người dùng nào khác: P1 chưa gửi mẫu; tin P3 kể ở câu 1 là Zalo (ngoài lát cắt) và không có nguyên văn. Muốn thêm câu nguồn `nguoi_dung` thì phải xin thêm tin từ P1–P3 — **không tự viết rồi ghi là của người dùng**.
 
 ## Lịch hẹn (dùng cho CP2 — chỉ ghi vai và giờ, không tên)
 
 | Vai | Giờ hẹn | Đã xong? |
 |---|---|---|
-| P1 · nhân viên văn phòng dùng app ngân hàng + ví hằng ngày | __ | ☑ |
-| P2 · nhân viên văn phòng dùng app ngân hàng + ví hằng ngày | __ | ☑ |
-| P3 · nhân viên văn phòng dùng app ngân hàng + ví hằng ngày | __ | ☑ |
+| P1 · nhân viên văn phòng dùng app ngân hàng + ví hằng ngày | 27/11/2026 (không ghi giờ) | ☑ |
+| P2 · nhân viên văn phòng dùng app ngân hàng + ví hằng ngày | 27/11/2026 (không ghi giờ) | ☑ |
+| P3 · nhân viên văn phòng dùng app ngân hàng + ví hằng ngày | 27/11/2026 (không ghi giờ) | ☑ |
 | Khảo sát (`evidence/survey/questions.md`) · mở form | __ → chốt __ | ☐ |
