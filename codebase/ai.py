@@ -14,10 +14,12 @@ Chế độ giả (mặc định khi .env chưa có MODEL_PROVIDER, hoặc MODEL
     trả một câu giả cố định, model "fake", token 0 — để luồng chạy hết từ trước CP2 (guide bước 3.2).
     Lượt `run.py eval` / `run.py simulate` chạy bằng model giả KHÔNG được tính.
 
-Nối model thật: điền .env (chép từ .env.example), rồi viết nhánh gọi API ở dưới theo docs/connect-model.md
-(có ví dụ OpenAI, Claude, model chạy trên máy, và cách nối nhà cung cấp khác). Không dán API key vào file này.
+Model thật: DeepSeek Chat Completions. Cách cấu hình ở docs/connect-model.md.
 """
+import json
 import os
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 from tracing import model_call
 
@@ -41,6 +43,9 @@ load_env()
 MODEL_PROVIDER = (os.environ.get("MODEL_PROVIDER") or "fake").strip().lower()
 MODEL_NAME = (os.environ.get("MODEL_NAME") or "").strip()
 API_KEY = (os.environ.get("API_KEY") or "").strip()
+DEEPSEEK_CHAT_URL = "https://api.deepseek.com/chat/completions"
+HIGH_RISK = "RUI_RO_CAO"
+INSUFFICIENT_EVIDENCE = "CHUA_DU_CAN_CU"
 
 
 @model_call
@@ -49,8 +54,42 @@ def call_model(system: str, user: str) -> dict:
         last = (user.strip().splitlines() or [""])[-1]
         return {"text": "[câu trả lời giả — chưa nối model] " + last[:60], "model": "fake", "tokens_in": 0, "tokens_out": 0}
 
-    # NHÓM VIẾT: gọi model thật ở đây (theo MODEL_PROVIDER, MODEL_NAME, API_KEY) rồi trả đúng 4 khoá.
-    # Ví dụ chép được cho từng nhà cung cấp: docs/connect-model.md mục 2.
-    raise NotImplementedError(
-        "chưa viết phần gọi model thật cho MODEL_PROVIDER=%s trong codebase/ai.py — xem docs/connect-model.md"
-        % MODEL_PROVIDER)
+    if MODEL_PROVIDER != "deepseek":
+        raise NotImplementedError("MODEL_PROVIDER phải là fake hoặc deepseek. Xem docs/connect-model.md.")
+    if not MODEL_NAME or not API_KEY:
+        raise NotImplementedError("Hãy điền MODEL_NAME và API_KEY của DeepSeek trong .env.")
+
+    payload = {
+        "model": MODEL_NAME,
+        "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
+        "temperature": 0,
+        "max_tokens": 64,
+        "thinking": {"type": "disabled"},
+        "response_format": {"type": "json_object"},
+    }
+    request = Request(DEEPSEEK_CHAT_URL, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+                      headers={"Content-Type": "application/json", "Authorization": f"Bearer {API_KEY}"})
+    try:
+        with urlopen(request, timeout=30) as response:
+            result = json.load(response)
+    except HTTPError as error:
+        hints = {401: "Xác minh API key.", 402: "Kiểm tra số dư API.", 429: "Giảm tốc độ gọi bằng --wait."}
+        hint = hints.get(error.code, "Kiểm tra MODEL_NAME và trạng thái API.")
+        raise RuntimeError(f"DeepSeek trả HTTP {error.code}. {hint}") from error
+    except (URLError, TimeoutError) as error:
+        raise RuntimeError("Không nhận được phản hồi từ API DeepSeek.") from error
+    except ValueError as error:
+        raise RuntimeError("API DeepSeek trả phản hồi không đọc được dưới dạng JSON.") from error
+
+    try:
+        label = json.loads(result["choices"][0]["message"]["content"])["label"]
+        model = result["model"]
+        tokens_in = result["usage"]["prompt_tokens"]
+        tokens_out = result["usage"]["completion_tokens"]
+    except (IndexError, KeyError, TypeError, ValueError) as error:
+        raise RuntimeError("Phản hồi DeepSeek thiếu nhãn, tên model hoặc usage.") from error
+    if label not in (HIGH_RISK, INSUFFICIENT_EVIDENCE):
+        raise RuntimeError("DeepSeek trả nhãn ngoài hai giá trị cho phép.")
+    if not isinstance(model, str) or not model.strip() or type(tokens_in) is not int or type(tokens_out) is not int or min(tokens_in, tokens_out) <= 0:
+        raise RuntimeError("DeepSeek không trả tên model hoặc số token hợp lệ.")
+    return {"text": label, "model": model, "tokens_in": tokens_in, "tokens_out": tokens_out}
