@@ -124,6 +124,7 @@ flowchart TD
 |---|---|---|
 | 27/11/2026, 23:04 ICT | Nối `deepseek-flash`, chạy 20 ca CP3 và ghi kết quả lượt 1. | Có token đo từ API và dữ liệu để phân tích lỗi, gồm lý do sai ở ca B10. |
 | 27/11/2026, 23:18 ICT | Hoàn thiện §0–§3, §6 và sửa bảng công cụ §4 cho khớp code; giữ nguyên chuẩn §7. | Dùng bàn giao P1–P3 trong `evidence/summary.md`, luồng `codebase/agent.py` và 20 ca `eval/benchmark.csv`; số ngoại suy impact được ghi là tự ước tính. |
+| 27/11/2026, 23:50 ICT | Dẫn trực tiếp video CP3 `demohacka.mp4` trong `README.md`. | Video quay `python run.py` với 3 ca B01, B05, B15; link Drive mở được khi không đăng nhập, có model `deepseek-flash` và token thật; không đưa API key vào video. |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 

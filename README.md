@@ -147,5 +147,5 @@ Codex hỗ trợ tích hợp API DeepSeek, sửa hướng dẫn chạy và đề
 | 4 | Bản chạy thử làm trọn lát cắt | `codebase/` · lệnh ở mục "Lệnh" |
 | 5 | Định nghĩa "tốt" + bộ câu thử | `data/DATA_CARD.md` · `eval/` |
 | 6 | Mô phỏng chi phí khi dùng thật | `cost/` |
-| 7 | Slide + demo + video dự phòng | `demo-slides.pdf` ở thư mục gốc · link video: ____ |
+| 7 | Slide + demo + video dự phòng | `demo-slides.pdf` ở thư mục gốc (CP4) · [video CP3: demohacka.mp4](https://drive.google.com/file/d/1phQP125iCu62ZdLdCvC_aVFa5QX8Kb2A/view?usp=sharing) |
 | + | *Bonus:* người dùng thử | `validation/log.md` |
