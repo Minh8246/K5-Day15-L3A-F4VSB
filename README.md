@@ -72,6 +72,20 @@ Gõ `dir` (Windows) hoặc `ls` (macOS / Linux): thấy `run.py` và `README.md`
 
 Trong README này lệnh viết là `python …`; máy nhóm cần `python3` hay `py` thì gõ thay.
 
+## Giao diện web Next.js
+
+Cần Node.js 20.9 trở lên và Python 3.10 trở lên. Từ gốc repo, chạy:
+
+```powershell
+cd web
+npm ci
+npm run dev
+```
+
+Mở `http://127.0.0.1:3000`, dán một SMS hoặc chọn tin nhắn mẫu, rồi bấm **Kiểm tra SMS**. Web gọi cùng luồng `answer()` như CLI. Python đọc cấu hình DeepSeek từ `.env` ở gốc repo. Khi chưa có cấu hình model, trang hiển thị rõ kết quả chế độ giả.
+
+Nếu Python không nằm trên `PATH`, đặt `PYTHON_BIN` thành đường dẫn tuyệt đối tới trình chạy Python. Web mặc định dùng `python` trên Windows và `python3` trên macOS/Linux. Để chạy bản build, dùng `npm run build` rồi `npm start` trong `web/`. Máy chạy web cần có cả Node.js, Python và các thư mục `codebase/`, `data/` của repo.
+
 ## Lệnh
 
 | Lệnh | Làm gì |

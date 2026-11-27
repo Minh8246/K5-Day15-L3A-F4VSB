@@ -1,3 +1,5 @@
+import SmsCheck from "./sms-check";
+
 export default function Home() {
   return (
     <>
@@ -34,6 +36,7 @@ export default function Home() {
           </div>
         </section>
 
+        <SmsCheck />
       </main>
 
       <footer className="container footer-row">
