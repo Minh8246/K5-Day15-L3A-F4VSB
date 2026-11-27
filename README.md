@@ -1,7 +1,7 @@
 > Đây là khung repo nộp bài. Điền mọi chỗ `____`, giữ nguyên tên các mục. **Mục 0 xoá đi sau khi tạo repo xong.**
 > Giờ, mốc, luật, rubric: xem `README.md`, `02-guide.md`, `03-rubric.md` trong repo đề (bộ đề BTC phát).
 
-# [Tên nhóm] — [Tên lát cắt]
+# F4VSB — Đánh giá rủi ro SMS ngân hàng và ví điện tử
 
 **Thành viên, lớp, track:** xem [TEAMS.md](TEAMS.md). **Điền TEAMS.md đúng format**: khi chấm và đánh giá, BTC quét file này để ghép điểm cho từng người.
 
@@ -147,5 +147,5 @@ Codex hỗ trợ tích hợp API DeepSeek, sửa hướng dẫn chạy và đề
 | 4 | Bản chạy thử làm trọn lát cắt | `codebase/` · lệnh ở mục "Lệnh" |
 | 5 | Định nghĩa "tốt" + bộ câu thử | `data/DATA_CARD.md` · `eval/` |
 | 6 | Mô phỏng chi phí khi dùng thật | `cost/` |
-| 7 | Slide + demo + video dự phòng | `demo-slides.pdf` ở thư mục gốc (CP4) · [video CP3: demohacka.mp4](https://drive.google.com/file/d/1phQP125iCu62ZdLdCvC_aVFa5QX8Kb2A/view?usp=sharing) |
+| 7 | Slide + demo + video dự phòng | [Slide CP4](demo-slides.pdf), [kịch bản demo](slides/outline.md) và [video DeepSeek CP3 có thể mở khi cần dự phòng](https://drive.google.com/file/d/1phQP125iCu62ZdLdCvC_aVFa5QX8Kb2A/view?usp=sharing). Video CP3 sử dụng kết quả lượt 1. |
 | + | *Bonus:* người dùng thử | `validation/log.md` |
