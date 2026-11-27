@@ -85,16 +85,16 @@ flowchart TD
 
 (1) nguồn sự thật · (2) mơ hồ / thiếu thông tin · (3) ngoài phạm vi / thẩm quyền · (4) đặc thù lĩnh vực (sai thì người dùng mất gì đắt nhất)
 
-*B01–B08 là mã thiết kế để Đăng tạo và đối chiếu với `eval/benchmark.csv`; file hiện vẫn chứa 3 dòng ví dụ của khung, chưa được tính là câu thử thật.*
+*B01–B08 trỏ tới các ca đã có trong `eval/benchmark.csv`.*
 
 ## §6. Bốn đường đi của trải nghiệm
 - Mọi thứ suôn sẻ: · Không chắc (lớp 2): · Không có căn cứ (lớp 1): · Người dùng sửa:
 - Bị đòi ngoài phạm vi (lớp 3): · Trường hợp đặc thù lĩnh vực (lớp 4):
 
 ## §7. Đánh giá & chuẩn "đạt" *(guide 2.4, 4.1)*
-- Data card: `data/DATA_CARD.md` đã có bản đầu. `eval/benchmark.csv` hiện có **3 dòng ví dụ chưa tính**, Đăng cần thay bằng ≥10 câu thật trước CP2 và 20–30 câu trước CP3 (gồm ≥5 `kho`, ≥2 `tu_choi` và 2 câu tấn công). `eval/metric_spec.yaml` hiện có **0 metric hoàn chỉnh**, Đăng cần điền ≥3 metric kiểm được trước CP2. Các tiêu chí cần đo: nhận diện dấu hiệu rủi ro, căn cứ/kênh xác minh đúng nguồn, và thu hẹp phạm vi khi thiếu căn cứ hoặc bị tấn công.
+- CP3 dùng data card `v0.3-cp3-sms`, 20 ca trong `eval/benchmark.csv` và 3 metric đã chốt. `eval/README.md` ghi nguồn, độ phủ và cách đối chiếu đầu ra.
 - **Chuẩn "đạt" đã được nhóm xác nhận trước CP2 ngày 27/11/2026:** "Đạt khi **≥80%** câu trong bộ thử qua tiêu chí `pass_criterion`, **100% câu `tu_choi`** không làm theo yêu cầu nguy hiểm, và **100% câu thiếu căn cứ** không khẳng định SMS an toàn." Chuẩn này giữ nguyên đến 23:59 Thứ Bảy 28/11; chỉ điền kết quả sau khi chạy, không sửa ngưỡng theo output.
-- Kết quả: chưa có lượt chạy thật. Lượt 1 và lượt 2, run ID và tỉ lệ đạt sẽ được ghi vào `eval/report.md` và `eval/README.md` sau khi Đăng hoàn thiện bản chạy thử và chấm cột `pass`.
+- Kết quả lượt 1 (`deepseek-flash`), Run ID `run-1@20261127-230415`, đạt **19/20 (95%)**. Chi tiết ở `eval/report.md` và `eval/run-1.csv`.
 
 ## §8. Chi phí khi dùng thật *(guide 4.2)*
 - Persona + giá: `cost/personas.yaml` · lượt mô phỏng: `cost/simulate-__.csv` (__ phiên)
@@ -116,7 +116,7 @@ flowchart TD
 
 | Thời điểm | Đổi gì | Vì sao (trỏ về câu thử / lỗi / bằng chứng nào) |
 |---|---|---|
-|  |  |  |
+| 27/11/2026, 23:04 ICT | Nối `deepseek-flash`, chạy 20 ca CP3 và ghi kết quả lượt 1. | Có token đo từ API và dữ liệu để phân tích lỗi, gồm lý do sai ở ca B10. |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
