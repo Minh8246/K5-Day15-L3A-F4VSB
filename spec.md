@@ -35,24 +35,20 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): chưa dùn
 ## §4. Thiết kế *(guide 2.2, 3.2)*
 - **Lát cắt MỘT CÂU** (1 người dùng · 1 việc · 1 quyết định AI · 1 kết quả): Khi một nhân viên văn phòng dán một SMS yêu cầu thao tác tài khoản hoặc chuyển tiền, AI dựa vào tín hiệu trong tin, danh bạ chính thức và quy tắc tên miền để quyết định **có dấu hiệu rủi ro cao hay chưa đủ căn cứ**, rồi trả lý do cùng kênh chính thức để người dùng tự xác minh.
 - **Không làm:** tự đọc/chặn SMS trên điện thoại; xử lý Zalo, email, cuộc gọi trong bản chạy thử; đăng nhập, bấm liên kết, nhập OTP hay chuyển tiền thay người dùng; khẳng định SMS chắc chắn an toàn chỉ vì tên người gửi khớp.
-- **Sơ đồ thiết kế** (tên công cụ là hợp đồng để Đăng triển khai trong `codebase/tools.py`):
+- **Sơ đồ triển khai CP3**
 
 ```mermaid
 flowchart TD
     A[Người dùng dán một SMS] --> B[extract_message_signals: tách người gửi, tổ chức, URL, yêu cầu]
     B --> C[lookup_official_channels: tra danh bạ tổ chức]
-    B --> D[check_domain_rules: kiểm URL và tín hiệu rủi ro]
-    C --> E{Đủ căn cứ để nêu dấu hiệu?}
-    D --> E
-    E -- Không --> F[Chưa đủ căn cứ; chỉ cách mở app hoặc tìm kênh chính thức]
-    E -- Có --> G[Model chọn mức rủi ro và diễn giải căn cứ]
-    G --> H[Chặn lời khuyên bấm link, đưa OTP, chuyển tiền; không kết luận an toàn tuyệt đối]
-    F --> I[Trả kết quả cho người dùng tự quyết]
-    H --> I
+    C --> D[check_domain_rules: kiểm URL và tín hiệu rủi ro]
+    D --> E[DeepSeek chọn một trong hai nhãn từ dữ kiện đã kiểm]
+    E --> F[Giữ cảnh báo cao khi có quy tắc mạnh, thu hẹp khi thiếu căn cứ]
+    F --> G[Trả nhãn, mã quy tắc và hướng dẫn tự xác minh]
 ```
 
-- **Hình dạng:** [x] workflow cố định · [ ] một agent · [ ] nhiều agent. Các bước tách tín hiệu, tra danh bạ và kiểm quy tắc luôn theo cùng luồng; model chỉ phân mức và giải thích. Không cần để model tự chọn công cụ hoặc chạy nhiều vòng.
-- **AI dựa vào đâu** — hợp đồng công cụ cần khớp `codebase/tools.py` (dữ liệu đã có trong `data/`, code hiện vẫn là ví dụ):
+- **Hình dạng:** [x] workflow cố định · [ ] một agent · [ ] nhiều agent. Ba công cụ chạy theo thứ tự cố định. Model chọn nhãn từ dữ kiện đã kiểm. Bản chạy thử diễn giải bằng mã quy tắc và nguồn danh bạ.
+- **AI dựa vào đâu** — hợp đồng công cụ trong `codebase/tools.py`
 
   | Công cụ | Input | Output | Tác động ra ngoài? |
   |---|---|---|---|
@@ -61,18 +57,18 @@ flowchart TD
   | `check_domain_rules` | URL, người gửi, tín hiệu nội dung và tổ chức đã tra | Danh sách mã quy tắc, mức độ và căn cứ từ `data/domain_rules.json` | Không; chỉ đọc quy tắc |
 
 - **Mức tự động:** [x] AI gợi ý, người quyết · [ ] AI tự làm khi chắc, chuyển người khi không · [ ] AI tự làm. Sai sót có thể khiến người dùng mất tiền hoặc lộ thông tin; kết quả chỉ là cảnh báo để người dùng tự mở ứng dụng hoặc liên hệ kênh chính thức.
-- **Chỗ chặn rủi ro:** Nếu không tìm thấy tổ chức, URL không thể kiểm, nguồn mâu thuẫn hoặc chỉ có SMS Brandname, trả `chưa đủ căn cứ`; không biến việc thiếu dấu hiệu thành kết luận an toàn. Không hiển thị link trong SMS như đường dẫn để bấm; chỉ đưa kênh xác minh đã kiểm nguồn.
+- **Chỗ chặn rủi ro.** Tín hiệu mạnh giữ cảnh báo cao. Dữ kiện thiếu hoặc mâu thuẫn mà chưa có dấu hiệu đủ mạnh dẫn đến nhãn `chưa đủ căn cứ`. Kênh xác minh cụ thể lấy từ danh bạ đã kiểm nguồn.
 - **Chỗ người duyệt:** Người dùng tự xác minh và tự quyết mọi thao tác tài khoản; công cụ không gửi tin, sửa dữ liệu ngân hàng hoặc tự chặn SMS.
 - **Nguyên tắc thiết kế:**
 
   | Nguyên tắc | Chỗ cụ thể trên sơ đồ / trong bản chạy thử |
   |---|---|
-  | G10 — thu hẹp phạm vi khi không chắc | Nhánh `Không` tại nút `Đủ căn cứ` trả `chưa đủ căn cứ`; tổ chức ngoài danh bạ, dữ liệu thiếu hoặc mâu thuẫn đều đi nhánh này. |
+  | G10 — thu hẹp phạm vi khi không chắc | Khi không có dấu hiệu đủ mạnh, đầu ra ghi `chưa đủ căn cứ` và chỉ cách tự xác minh. |
   | Căn cứ kiểm lại được | Kết quả nêu mã quy tắc và nguồn danh bạ đã dùng; người dùng có thể tự kiểm trên app/trang chính thức. |
   | Người dùng giữ quyền quyết định | Khối cuối chỉ trả cảnh báo và cách xác minh; không có công cụ giao dịch hoặc mở link. |
   | Giảm lộ thông tin | Hướng dẫn che tên, số tài khoản, OTP trước khi dán; không lưu nguyên SMS vào dữ liệu công khai. |
 
-- **Phần còn giả:** Tại thời điểm viết CP2, `codebase/agent.py` và `codebase/tools.py` còn workflow `search_example` của khung, `codebase/ai.py` còn model `fake`; ba công cụ, nhánh chặn rủi ro và lời giải thích trong sơ đồ là thiết kế cần Đăng hiện thực trước CP3. `data/official_channels.json` và `data/domain_rules.json` đã có bản đầu nhưng số hotline/nguồn cần kiểm lại trước khi hiện cho người dùng.
+- **Chạy tại CP3.** Lượt 1 dùng `deepseek-flash` với cấu hình trong `docs/connect-model.md`. Dữ kiện gửi đi gồm tổ chức đã tra, mã quy tắc và các cờ có người gửi hoặc URL. Chế độ `fake` phục vụ kiểm luồng.
 
 ## §5. Chỗ khó — 4 lớp + ≥6 kịch bản + 2 tấn công *(guide 2.3)*
 
