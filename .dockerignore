@@ -1,0 +1,17 @@
+**
+!web/
+!web/app/
+!web/app/**
+!web/lib/
+!web/lib/**
+!web/analyze_sms.py
+!web/next.config.mjs
+!web/package.json
+!web/package-lock.json
+!codebase/
+!codebase/*.py
+!data/
+!data/domain_rules.json
+!data/official_channels.json
+**/.env*
+**/*.pem

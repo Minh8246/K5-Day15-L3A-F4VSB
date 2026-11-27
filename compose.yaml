@@ -1,0 +1,37 @@
+services:
+  app:
+    image: ${F4VSB_IMAGE:-f4vsb-app:latest}
+    build: .
+    init: true
+    env_file:
+      - path: .env.deploy
+        required: false
+    expose:
+      - "8080"
+    restart: unless-stopped
+    cpus: 1.5
+    mem_limit: 1g
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    logging: &bounded-logs
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  tunnel:
+    image: cloudflare/cloudflared:2026.11.2
+    profiles: [tunnel]
+    command: ["tunnel", "--no-autoupdate", "run"]
+    env_file: .env.tunnel
+    depends_on:
+      app:
+        condition: service_healthy
+    restart: unless-stopped
+    cpus: 0.5
+    mem_limit: 128m
+    logging: *bounded-logs
