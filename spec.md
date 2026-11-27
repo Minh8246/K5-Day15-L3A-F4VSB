@@ -8,7 +8,7 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): chưa dùn
 
 ## §0. Hiện tại việc này diễn ra thế nào *(guide 1.1)*
 - Luồng hiện tại theo P1–P3 trong `evidence/interviews/`: (1) nhận tin yêu cầu thao tác tài khoản/chuyển tiền; (2) đọc người gửi, link và giọng thúc giục; (3) kiểm bằng app ngân hàng (P2), hỏi người thân và tra mạng (P3), hoặc nhớ lại quy trình (P1); (4) tự quyết định có làm theo hay dừng. Lần gần nhất họ mất khoảng 10–60 phút. Phỏng vấn gồm cả SMS và Zalo; bản chạy thử chỉ xử lý SMS do người dùng dán.
-- Ảnh minh chứng do thành viên chụp trên VCB Digibank: màn hình **Settings** có mục **Contact Vietcombank**, cho thấy đường tự tìm kênh hỗ trợ trong ứng dụng thay vì bấm link trong SMS. Ảnh không hiển thị tên, số tài khoản, số dư hay giao dịch; đây là minh chứng thao tác hiện tại của thành viên, không phải ảnh từ buổi phỏng vấn hoặc bằng chứng đã nhận SMS đáng ngờ.
+- Ảnh do thành viên chụp trên VCB Digibank chỉ minh họa **bước tự xác minh ở cuối lát cắt**: sau khi nhận cảnh báo hoặc nhãn chưa đủ căn cứ, người dùng có thể tự mở app và tìm mục **Contact Vietcombank** trong **Settings** thay vì bấm link trong SMS. Ảnh không chứng minh P1–P3 đã dùng VCB, không phải bằng chứng về pain hay độ đúng của AI; các kết luận đó dựa vào phỏng vấn và bộ thử riêng. Ảnh không hiển thị tên, số tài khoản, số dư hay giao dịch.
 
   ![Màn hình Settings của VCB Digibank với mục Contact Vietcombank](evidence/vcb-contact.jpg)
 - Công cụ đang dùng theo phỏng vấn: P2 mở app ngân hàng để tự kiểm, P3 tra mạng và hỏi người thân. Chưa kiểm được họ đã dùng AI nào cho việc này, nên không khẳng định có AI trong luồng hiện tại.
@@ -128,6 +128,7 @@ flowchart TD
 | 27/11/2026, 23:18 ICT | Hoàn thiện §0–§3, §6 và sửa bảng công cụ §4 cho khớp code; giữ nguyên chuẩn §7. | Dùng bàn giao P1–P3 trong `evidence/summary.md`, luồng `codebase/agent.py` và 20 ca `eval/benchmark.csv`; số ngoại suy impact được ghi là tự ước tính. |
 | 27/11/2026, 23:50 ICT | Dẫn trực tiếp video CP3 `demohacka.mp4` trong `README.md`. | Video quay `python run.py` với 3 ca B01, B05, B15; link Drive mở được khi không đăng nhập, có model `deepseek-flash` và token thật; không đưa API key vào video. |
 | 28/11/2026, 00:02 ICT | Bổ sung ảnh chụp VCB Digibank của thành viên vào §0. | Ảnh cho thấy mục `Contact Vietcombank` trong app, phù hợp bước tự tìm kênh xác minh; không có dữ liệu tài khoản cá nhân trong ảnh. |
+| 28/11/2026, 00:05 ICT | Làm rõ chú thích ảnh §0 chỉ minh họa bước tự xác minh, không phải bằng chứng pain hoặc hiệu quả AI. | Tránh suy diễn từ ảnh cài đặt VCB sang hành vi của P1–P3 hay kết quả bộ thử. |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
