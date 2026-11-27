@@ -101,21 +101,21 @@ Nhóm dùng stack khác (Node, Streamlit, notebook…): sửa hàm `run_app()` t
 | `codebase/ai.py` | `call_model(system, user)` — chỗ duy nhất gọi model. Chưa điền `.env` thì chạy **chế độ giả** | 3.3 |
 
 - **Trước CP2:** để chế độ giả, công cụ trả dữ liệu giả — `python run.py` đi hết luồng là đủ.
-- **Trước CP3:** nối model thật theo [docs/connect-model.md](docs/connect-model.md), `eval --try` thấy token > 0 rồi mới `eval`.
+- **Model thật:** điền key DeepSeek trong `.env` theo [hướng dẫn kết nối](docs/connect-model.md), chạy `python run.py eval --try` để xác nhận token > 0 rồi chạy `python run.py eval`.
 - Bộ chạy gửi **nguyên ô `input`** của câu thử vào `answer(text)`. Dữ liệu nền (bài học, thông báo, lịch…) để trong `data/`, đọc qua công cụ.
 
 ## Phần nào thật, phần nào giả
 
 | Thành phần | Thật / Giả | Ghi chú |
 |---|---|---|
-| Lời gọi AI ở quyết định trung tâm | **Thật** (bắt buộc từ CP3) | Model: ____ |
+| Lời gọi AI ở quyết định trung tâm | **Thật** khi cấu hình `.env` | `deepseek-flash` phân loại theo tín hiệu đã kiểm. |
 |  |  |  |
 
 ## Dùng AI vào việc gì
 
 2–3 dòng (bắt buộc): nhóm dùng công cụ AI nào để làm gì, người kiểm lại phần nào. Chi tiết: [docs/ai-usage.md](docs/ai-usage.md). Coding agent đọc [AGENTS.md](AGENTS.md).
 
-____
+Codex hỗ trợ tích hợp API DeepSeek, sửa hướng dẫn chạy và đề xuất điểm lượt 1 dựa trên 20 đầu ra thật. Đăng đã rà cột `pass` và xác nhận giữ kết quả 19/20.
 
 ## File mẫu — điền ở bước nào
 
