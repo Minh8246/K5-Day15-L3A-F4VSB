@@ -1,4 +1,4 @@
-# Canvas — [tên nhóm] · Track [A–F]
+# Canvas — F4VSB · Track E (Tài chính)
 
 > Điền ở guide bước 1.4. CP1 17:00 Thứ Sáu 27/11: nộp bản đầu, đủ 7 dòng (dòng 4 được ghi giả thuyết + nguồn sẽ kiểm).
 > CP2 19:30 Thứ Sáu 27/11: cập nhật (số bằng chứng đầu, lát cắt đã chốt) và điền dòng "Đã đổi gì so với CP1".
@@ -6,11 +6,11 @@
 
 | # | Dòng | Nhóm điền |
 |---|---|---|
-| 1 | Track + lát cắt dự kiến | |
-| 2 | Người dùng chính (một vai cụ thể — không phải "học viên nói chung") | |
-| 3 | Pain một câu: ai — đang làm gì — vướng đâu — hậu quả | |
-| 4 | Bằng chứng đầu — CP1: giả thuyết + nguồn sẽ kiểm · CP2: số đầu tiên + 1 trích dẫn | |
-| 5 | **Lát cắt MỘT CÂU** (1 người dùng · 1 việc · 1 quyết định AI · 1 kết quả) | |
-| 6 | AI tự làm đến đâu + 1 dòng lý do: sai thì ai chịu gì | |
-| 7 | Phân công có tên | |
+| 1 | Track + lát cắt dự kiến | Track E — đánh giá rủi ro của một tin nhắn SMS/Zalo/email yêu cầu thao tác tài khoản ngân hàng/ví điện tử hoặc chuyển tiền. |
+| 2 | Người dùng chính (một vai cụ thể — không phải "học viên nói chung") | Khách hàng cá nhân dùng ngân hàng số hoặc ví điện tử trên điện thoại, vừa nhận một tin nhắn yêu cầu đăng nhập, xác minh tài khoản hoặc chuyển tiền. |
+| 3 | Pain một câu: ai — đang làm gì — vướng đâu — hậu quả | Khách hàng cá nhân khi đọc tin nhắn yêu cầu thao tác tài khoản hoặc chuyển tiền khó biết tên người gửi và đường dẫn có đúng kênh chính thức hay không, nên có thể bấm vào đường dẫn giả hoặc chuyển tiền theo yêu cầu lừa đảo. |
+| 4 | Bằng chứng đầu — CP1: giả thuyết + nguồn sẽ kiểm · CP2: số đầu tiên + 1 trích dẫn | **Giả thuyết, chưa có số liệu:** người dùng gặp khó khi tự xác minh tin nhắn có tên hiển thị hoặc tên miền gần giống kênh chính thức. **Sẽ kiểm:** phỏng vấn ít nhất 3 người dùng ngân hàng/ví điện tử về lần nhận tin nhắn đáng ngờ và cách họ xác minh; đối chiếu các ví dụ đã ẩn thông tin cá nhân với kênh liên hệ chính thức của đơn vị liên quan. |
+| 5 | **Lát cắt MỘT CÂU** (1 người dùng · 1 việc · 1 quyết định AI · 1 kết quả) | Khi một khách hàng cá nhân dán một tin nhắn yêu cầu thao tác tài khoản hoặc chuyển tiền, AI tách thực thể và đối chiếu danh bạ chính thức cùng quy tắc nhận diện tên miền giả để phân mức rủi ro, rồi cho biết nên dừng ngay hay xác minh thêm, kèm lý do và kênh chính thức để tự kiểm tra. |
+| 6 | AI tự làm đến đâu + 1 dòng lý do: sai thì ai chịu gì | AI chỉ phân tích nội dung, gợi ý mức rủi ro và cách xác minh; không truy cập tài khoản, bấm liên kết hay chuyển tiền. Người dùng tự quyết sau khi kiểm tra qua kênh chính thức, vì đánh giá sai có thể khiến họ mất tiền hoặc lộ thông tin tài khoản. |
+| 7 | Phân công có tên | **Phân công dự kiến:** Nguyễn Công Quân — điều phối, tổng hợp canvas và spec; Vũ Quang Minh — phỏng vấn, tổng hợp bằng chứng pain; Trần Việt Thịnh — kiểm nguồn danh bạ chính thức, quy tắc tên miền và dữ liệu mẫu; Nguyễn Văn Đăng — bản chạy thử, bộ câu thử và metric. |
 | — | *(CP2)* Đã đổi gì so với CP1 | |
