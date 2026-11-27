@@ -12,7 +12,8 @@ README của nhóm có mục "Dùng AI vào việc gì" (2–3 dòng, bắt bu�
 | Rà câu hỏi phỏng vấn / khảo sát | | Chỉ rà câu dẫn dắt | | |
 | Viết câu thử (benchmark) | | | Mỗi câu thử có `source`; câu thử AI viết được ghi rõ | |
 | Sinh data `synthetic` (nếu có) | | | Seed __ · kiểm tay __ dòng | |
-| Chấm cột `pass` bằng LLM (nếu có) | Codex | Đối chiếu 20 đầu ra với tiêu chí từng câu và metric, ghi đề xuất vào `eval/run-1.csv`. | Đăng rà kết quả và xác nhận giữ 19/20. | Nguyễn Văn Đăng |
-| Slide, văn bản | | | | |
+| Chấm cột `pass` bằng LLM (nếu có) | Codex | Đối chiếu đầu ra của hai lượt với tiêu chí từng câu và metric, ghi đề xuất vào CSV. | Đăng rà và xác nhận chấm theo tiêu chí đã chốt. Chưa có lượt chấm độc lập thứ hai. | Nguyễn Văn Đăng |
+| Cải tiến CP4 | Codex | Sửa mẫu nhận diện yêu cầu xác thực hoặc chuyển tiền, chạy lại cùng bộ và mô phỏng 50 phiên. | Đăng xác nhận kết quả lượt 2. | Đăng và Thịnh phụ trách |
+| Slide, văn bản | Codex | Soạn và kiểm tra 8 trang PDF theo bằng chứng, hai lượt đánh giá và mô phỏng có dữ liệu gốc. | Chờ nhóm rà trước khi trình bày. | Quân và Minh phụ trách |
 
 **Không dùng AI để:** tạo người được phỏng vấn, trích dẫn, câu trả lời khảo sát; sửa kết quả các lượt đã chạy (`eval/run-*.csv`, `cost/simulate-*.csv`, `traces/`).
