@@ -7,7 +7,7 @@
 - Tên nhóm: F4VSB
 - Lớp: L3A
 - Track: E
-- Link repo: (https://github.com/Minh8246/K5-Day15-L3A-F4VSB)
+- Link repo: https://github.com/Minh8246/K5-Day15-L3A-F4VSB
 
 | STT | Họ và tên | Mã học viên | Vai trò | Phần việc chính |
 |---|---|---|---|---|
