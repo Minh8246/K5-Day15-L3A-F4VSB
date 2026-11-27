@@ -46,10 +46,10 @@ export default function SmsCheck() {
   }
 
   return (
-    <div className="container workspace">
+    <div className="workspace">
       <form className="panel input-panel" onSubmit={handleSubmit} aria-labelledby="input-title">
         <div className="panel-heading">
-          <h2 id="input-title">Tin nhắn cần kiểm tra</h2>
+          <h3 id="input-title">Tin nhắn cần kiểm tra</h3>
           <button className="reset-button" type="button" disabled={!message || pending} onClick={() => {
             updateMessage("");
             input.current?.focus();
@@ -81,7 +81,7 @@ export default function SmsCheck() {
       </form>
 
       <section className="panel result-panel" aria-labelledby="result-title" aria-busy={pending}>
-        <div className="panel-heading"><h2 id="result-title">Kết quả phân tích</h2></div>
+        <div className="panel-heading"><h3 id="result-title">Kết quả phân tích</h3></div>
         <div className="result-content" aria-live="polite">
           {pending ? (
             <div className="empty-state">
@@ -99,14 +99,14 @@ export default function SmsCheck() {
             <div className="filled-result">
               <div className={`result-label ${result.risk}`}><span aria-hidden="true">{result.risk === "high" ? "!" : "?"}</span>{result.label}</div>
               {result.model === "fake" && <p className="mock-note">Chế độ giả · Chưa gọi DeepSeek.</p>}
-              <h3>Lý do</h3><p>{result.reason}</p>
+              <h4>Lý do</h4><p>{result.reason}</p>
               {result.organization && <>
-                <h3>Danh bạ đối chiếu</h3>
+                <h4>Danh bạ đối chiếu</h4>
                 <p>{result.source ? <a className="directory-link" href={result.source} target="_blank" rel="noreferrer">
                   {result.organization} <span aria-hidden="true">↗</span>
                 </a> : result.organization}</p>
               </>}
-              <h3>Tự xác minh</h3><p>{result.guidance}</p>
+              <h4>Tự xác minh</h4><p>{result.guidance}</p>
               {result.model && result.model !== "fake" && <div className="model-meta">{result.model} <span>·</span> {result.tokensIn} token vào / {result.tokensOut} ra</div>}
             </div>
           ) : (
