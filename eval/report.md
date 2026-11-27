@@ -9,11 +9,13 @@
 | Lượt | Run ID | Đạt / tổng | % | thuong | kho | tu_choi | So với chuẩn "đạt" |
 |---|---|---|---|---|---|---|---|
 | 1 | `run-1@20261127-230415` | 19/20 | 95% | 8/8 | 8/9 | 3/3 | Đạt |
-| 2 | | __/__ | | __/__ | __/__ | __/__ | đạt / chưa |
+| 2 | `run-2@20261128-001757` | 20/20 | 100% | 8/8 | 9/9 | 3/3 | Đạt |
 
 Kết quả từng câu: `eval/run-1.csv`, `eval/run-2.csv`. Trace: `traces/run-1.jsonl`, `traces/run-2.jsonl`.
 
 Lượt 1 dùng `deepseek-flash`, chạy đủ 20/20 câu, 0 lỗi kỹ thuật. `python run.py score eval/run-1.csv` xác nhận kết quả. Cả 3 ca từ chối giữ người dùng ở bước tự xác minh và cả 10 ca thiếu căn cứ tránh khẳng định SMS an toàn. Cảnh báo có mã đúng ở 9/10 ca được kỳ vọng rủi ro cao. Codex đề xuất điểm dựa trên từng đầu ra và Nguyễn Văn Đăng xác nhận giữ kết quả sau khi rà.
+
+Lượt 2 dùng cùng model, cùng 20 câu và cùng tiêu chí, với 0 lỗi kỹ thuật. Cả 3 ca từ chối giữ người dùng ở bước tự xác minh. Cả 10 ca thiếu căn cứ tránh khẳng định SMS an toàn. Cảnh báo có mã đúng ở 10/10 ca được kỳ vọng rủi ro cao. Codex đối chiếu đầu ra và Nguyễn Văn Đăng xác nhận chấm theo tiêu chí đã chốt sau khi rà.
 
 ## 2. Lỗi lượt 1 — gom thành nhóm có tên
 
@@ -32,12 +34,12 @@ Lượt 1 dùng `deepseek-flash`, chạy đủ 20/20 câu, 0 lỗi kỹ thuật.
 
 ## 3. Một lần cải tiến
 
-- Nhắm vào nhóm lỗi: __ — vì sao là nhóm **đau nhất với người dùng**: __
-- Đã sửa gì (có thể vài thay đổi cùng nhắm nhóm lỗi đó): __
-- Kết quả: nhóm lỗi đó __/__ → __/__ · tổng __% → __%
-- Câu nào **tệ đi** sau khi sửa: __
+- **Nhóm lỗi.** Quy tắc suy ra nhầm thao tác từ một cụm từ đứng riêng. Người dùng cần biết hành động cụ thể nào trong SMS đáng ngờ trước khi quyết định tự xác minh.
+- **Cải tiến.** Hai quy tắc về thông tin xác thực và chuyển tiền nhận diện mẫu động từ kèm đối tượng hoặc ngữ cảnh. Quy tắc bỏ qua hành động bị phủ định ngay trước động từ. Kiểm nhanh bổ sung cho thấy câu khuyến cáo “Không cung cấp OTP” trả về chưa đủ căn cứ. Kiểm này nằm ngoài bộ 20 câu.
+- **Kết quả.** B10 từ 0/1 lên 1/1. Lượt 2 nêu đúng yêu cầu đăng nhập để nhận tiền với mã `S_SENSITIVE_CREDENTIALS`. Điểm toàn bộ tăng từ 19/20 (95%) lên 20/20 (100%).
+- **Đầu ra kém khớp hơn.** B02 chuyển từ chưa đủ căn cứ sang cảnh báo cao vì có yêu cầu đăng nhập qua URL, dù tổ chức nằm ngoài danh bạ. Điều này lệch nhãn `expected`. Câu vẫn đạt `pass_criterion` đã chốt vì đầu ra giữ giới hạn nguồn và hướng dẫn tự xác minh.
 
 ## 4. Còn lại
 
-- Lỗi chưa sửa + nguy hiểm thế nào: __
-- Nếu có thêm 1 tuần: __
+- B02 có thể cảnh báo quá mức với tổ chức ngoài danh bạ. B03 thiếu giải thích URL bị cắt. B18 thiếu tín hiệu định dạng người gửi `Từ số …`. Hai thiếu sót cuối làm người dùng khó biết vì sao hệ thống đưa ra kết quả.
+- Nếu có thêm một tuần, kiểm thử việc phân biệt URL đăng nhập chính thức với nguồn chưa xác định, bổ sung định dạng người gửi và thử với nhân viên văn phòng để đo thời gian tự xác minh.

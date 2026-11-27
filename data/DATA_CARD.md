@@ -24,6 +24,6 @@
 | Từ đâu | Nhóm tự biên soạn dựa trên khuyến cáo cảnh báo lừa đảo SMS Brandname của các ngân hàng/ví điện tử tại Việt Nam (không thu thập dữ liệu cá nhân). |
 | Xử lý những bước gì | Phân tách thành 3 nhóm quy tắc độc lập: `domain_rules` (8 quy tắc URL/tên miền), `sms_sender_rules` (3 quy tắc đặc thù người gửi SMS gồm số di động cá nhân, Brandname biến tấu, và cảnh báo fake BTS), và `content_signal_rules` (4 nhóm tín hiệu nội dung SMS). |
 | Số dòng / số đoạn | 8 quy tắc tên miền/URL + 3 quy tắc người gửi SMS + 4 nhóm quy tắc tín hiệu nội dung + 2 ghi chú bảo mật. |
-| Phiên bản / ngày lấy | `v0.2-cp2-sms` · 27/11/2026. |
+| Phiên bản / ngày lấy | `0.4-cp4-sms` · 28/11/2026. Hai quy tắc về thông tin xác thực và chuyển tiền dùng mẫu yêu cầu có ngữ cảnh. Công cụ bỏ qua mẫu yêu cầu bị phủ định ngay trước động từ. |
 | Nhãn | nhóm tự biên soạn (quy tắc kiểm tra tất định, không phải bằng chứng pain). |
 | Giới hạn | Quy tắc từ khóa và danh sách TLD/link rút gọn có thể bỏ sót thủ đoạn biến tấu chữ mới hoặc cảnh báo thận trọng với SMS quảng cáo hợp lệ có dùng link rút gọn. Vì vậy hệ thống luôn nêu rõ từng quy tắc bị kích hoạt và hướng dẫn người dùng tự kiểm tra qua ứng dụng/hotline chính thức, không tự khẳng định 100%. |

@@ -8,6 +8,7 @@ from urllib.parse import urlsplit
 from tracing import tool
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
+NEGATED_REQUEST = re.compile(r"\b(?:đừng|chớ|không(?:\s+(?:được|nên|cần|bao giờ|yêu cầu))*)\s+$")
 
 
 def _data(name):
@@ -88,7 +89,14 @@ def check_domain_rules(signals: dict, official: dict) -> dict:
         add("R_SMS_PERSONAL_SENDER", "high", "Số cá nhân tự xưng là tổ chức tài chính.")
     text = signals.get("message", "").casefold()
     for rule in rules["content_signal_rules"]:
-        if any(word.casefold() in text for word in rule.get("keywords", [])):
+        requests = rule.get("requests")
+        if requests:
+            for request in requests:
+                matches = re.finditer(request["pattern"], text)
+                if any(not NEGATED_REQUEST.search(text, 0, match.start()) for match in matches):
+                    add(rule["id"], rule["severity"], request.get("reason", rule["description"]))
+                    break
+        elif any(word.casefold() in text for word in rule.get("keywords", [])):
             add(rule["id"], rule["severity"], rule["description"])
     return {"findings": findings,
             "has_high_risk": any(f["severity"] == "high" for f in findings)}

@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "version": "0.2-cp2-sms",
-    "updated_date": "2026-11-27",
+    "version": "0.4-cp4-sms",
+    "updated_date": "2026-11-28",
     "purpose": "Bộ quy tắc tất định để phát hiện tên miền giả mạo, đầu số người gửi đáng ngờ và dấu hiệu lừa đảo phổ biến trong tin nhắn SMS ngân hàng/ví điện tử."
   },
   "domain_rules": [
@@ -124,7 +124,20 @@
       "id": "S_SENSITIVE_CREDENTIALS",
       "severity": "high",
       "description": "SMS yêu cầu cung cấp mã OTP, mật khẩu, mã PIN, số CVV hoặc đăng nhập qua đường dẫn đính kèm.",
-      "keywords": ["otp", "mã xác thực", "mật khẩu", "password", "mã pin", "cvv", "đăng nhập ngay", "xác thực tài khoản"]
+      "requests": [
+        {
+          "pattern": "\\b(?:cung cấp|gửi|nhập|đọc|chia sẻ|tiết lộ|cho biết)\\s+(?:mã\\s+)?(?:otp|mã xác thực|mật khẩu|password|mã pin|cvv)\\b",
+          "reason": "SMS yêu cầu nhập hoặc cung cấp thông tin xác thực."
+        },
+        {
+          "pattern": "\\b(?:đăng nhập|xác thực)(?:\\s+tài khoản)?\\s+để\\s+nhận\\s+(?:khoản\\s+)?(?:tiền|hoàn tiền|hoàn phí|quà|thưởng|phần thưởng|ưu đãi)\\b",
+          "reason": "SMS yêu cầu đăng nhập hoặc xác thực tài khoản để nhận tiền, hoàn phí hoặc phần thưởng."
+        },
+        {
+          "pattern": "\\b(?:đăng nhập|xác thực)(?:\\s+(?:tài khoản|ngay))*\\s+(?:qua|tại|trên|vào)\\s+(?:https?://|www\\.|(?:đường\\s+)?(?:link|liên kết)\\b)",
+          "reason": "SMS yêu cầu đăng nhập hoặc xác thực tài khoản qua đường dẫn trong tin."
+        }
+      ]
     },
     {
       "id": "S_URGENCY_PRESSURE",
@@ -135,8 +148,12 @@
     {
       "id": "S_TRANSFER_REQUEST",
       "severity": "high",
-      "description": "SMS yêu cầu chuyển tiền để xác minh, mở khóa, nhận thưởng, hoàn tiền hoặc tất toán.",
-      "keywords": ["chuyển tiền", "chuyển khoản", "nạp tiền xác minh", "phí mở khóa", "nhận thưởng", "hoàn tiền", "stk"]
+      "description": "SMS có yêu cầu chuyển tiền, nạp tiền hoặc trả phí.",
+      "requests": [
+        {
+          "pattern": "\\b(?:chuyển tiền|chuyển khoản|nạp tiền|đóng phí|nộp phí|trả phí|thanh toán)\\s+(?:\\d|(?:cho|vào|tới|qua|để|phí|tiền|ngay|trước|xác minh)\\b)"
+        }
+      ]
     },
     {
       "id": "S_INSTALL_APP",
