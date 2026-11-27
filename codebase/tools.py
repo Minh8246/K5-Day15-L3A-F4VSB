@@ -1,18 +1,94 @@
-"""Công cụ của bài toán — NHÓM VIẾT. Điền ở guide bước 2.2 (thiết kế) và 3.2 (code).
+"""Công cụ đọc dữ liệu công khai và phân tích một SMS do người dùng tự dán."""
+import ipaddress
+import json
+import os
+import re
+from urllib.parse import urlsplit
 
-Mỗi công cụ là một hàm Python có @tool. Docstring ghi đúng 4 ý như sơ đồ ở spec.md §4:
-    tên · input · output · có tác động ra ngoài không (gửi tin, sửa dữ liệu, chấm điểm…)
-Khung tự ghi mỗi lần gọi công cụ vào trace (tên, input, output rút gọn, thời gian, lỗi).
+from tracing import tool
 
-Số công cụ, kiểu công cụ do thiết kế của nhóm quyết định — có bài chỉ cần một công cụ tra cứu.
-Công cụ có tác động ra ngoài: KHÔNG tự làm. Trả về bản nháp chờ người duyệt (guide bước 2.2, "chỗ người duyệt").
-Dữ liệu công cụ đọc (bài mẫu, thông báo mẫu, lịch…): để trong data/ và mô tả ở data/DATA_CARD.md.
-"""
-from tracing import tool, TOOLS  # noqa: F401  (TOOLS: danh sách công cụ đã đăng ký, dùng khi viết vòng lặp agent)
+DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
+
+
+def _data(name):
+    with open(os.path.join(DATA_DIR, name), encoding="utf-8") as handle:
+        return json.load(handle)
 
 
 @tool
-def search_example(query: str) -> list:
-    """(ví dụ — thay bằng công cụ của nhóm) Tra dữ liệu mẫu theo câu hỏi.
-    Input: câu hỏi (str). Output: danh sách đoạn {"code", "text"}. Không tác động ra ngoài."""
-    return [{"code": "VD-1", "text": "(ví dụ) đoạn dữ liệu giả — thay bằng dữ liệu thật của bài toán"}]
+def extract_message_signals(message: str) -> dict:
+    """Tách tín hiệu SMS. Input: văn bản SMS. Output: người gửi, tổ chức, URL. Tác động ra ngoài: không."""
+    content = (message or "").strip()
+    match = re.search(r"(?im)^\s*(?:người gửi|sender)\s*:\s*(.+)$", content)
+    sender = match.group(1).strip() if match else ""
+    urls = re.findall(r"(?:https?://|www\.)[^\s<>\"']+", content, flags=re.I)
+    urls = [url.rstrip(".,;!?)") for url in urls]
+    mentioned = []
+    for item in _data("official_channels.json")["organizations"]:
+        names = [item["name"]] + item.get("aliases", []) + item.get("sms_brandnames", [])
+        if any(re.search(r"(?<!\w)" + re.escape(name.casefold()) + r"(?!\w)", content.casefold()) for name in names if len(name) >= 3):
+            mentioned.append(item["id"])
+    mentioned = list(dict.fromkeys(mentioned))
+    return {"sender": sender, "organizations": mentioned,
+            "organization": mentioned[0] if len(mentioned) == 1 else "",
+            "urls": urls, "message": content}
+
+
+@tool
+def lookup_official_channels(organization: str) -> dict:
+    """Tra kênh chính thức. Input: mã tổ chức. Output: tên miền và nguồn hoặc chưa có dữ liệu. Tác động ra ngoài: không."""
+    for item in _data("official_channels.json")["organizations"]:
+        if organization and organization.casefold() in (item["id"].casefold(), item["name"].casefold()):
+            return {"found": True, "id": item["id"], "name": item["name"],
+                    "official_domains": item.get("official_domains", []),
+                    "source_url": item.get("source_url", "")}
+    return {"found": False, "reason": "Không xác định được tổ chức trong danh bạ."}
+
+
+@tool
+def check_domain_rules(signals: dict, official: dict) -> dict:
+    """Kiểm quy tắc SMS. Input: tín hiệu và danh bạ. Output: mã quy tắc, lý do, mức độ. Tác động ra ngoài: không."""
+    rules = _data("domain_rules.json")
+    findings = []
+
+    def add(code, severity, reason):
+        if code not in {entry["id"] for entry in findings}:
+            findings.append({"id": code, "severity": severity, "reason": reason})
+
+    domains = [d.casefold() for d in official.get("official_domains", [])]
+    shorteners = next(r["shortener_domains"] for r in rules["domain_rules"] if r["id"] == "R_SHORTENER")
+    suspect_tlds = next(r["suspicious_tlds"] for r in rules["domain_rules"] if r["id"] == "R_SUSPICIOUS_TLD")
+    for url in signals.get("urls", []):
+        try:
+            parsed = urlsplit(url if "://" in url else "https://" + url)
+            host = (parsed.hostname or "").rstrip(".").casefold()
+        except ValueError:
+            continue
+        official_host = any(host == d or host.endswith("." + d) for d in domains)
+        if host in shorteners:
+            add("R_SHORTENER", "high", "URL rút gọn che tên miền đích.")
+        try:
+            ipaddress.ip_address(host)
+            add("R_RAW_IP", "high", "URL trỏ trực tiếp tới địa chỉ IP.")
+        except ValueError:
+            pass
+        if parsed.scheme == "http":
+            add("R_NO_HTTPS", "medium", "URL dùng http thay vì https.")
+        if "xn--" in host:
+            add("R_PUNYCODE", "high", "Tên miền có mã punycode cần xác minh.")
+        if not official_host and any(host.endswith(tld) for tld in suspect_tlds):
+            add("R_SUSPICIOUS_TLD", "medium", "Đuôi tên miền cần kiểm tra thêm.")
+        if domains and not official_host:
+            add("R_DOMAIN_MISMATCH", "high", "Tên miền không thuộc danh bạ chính thức của tổ chức.")
+        if re.search(r"\.(?:apk|exe|msi|zip|rar)$", parsed.path, re.I):
+            add("R_APK_OR_EXECUTABLE", "high", "URL dẫn tới tệp cài đặt hoặc tệp nén.")
+
+    sender = signals.get("sender", "")
+    if official.get("found") and re.fullmatch(r"(?:\+?84|0)[35789]\d{8}", sender):
+        add("R_SMS_PERSONAL_SENDER", "high", "Số cá nhân tự xưng là tổ chức tài chính.")
+    text = signals.get("message", "").casefold()
+    for rule in rules["content_signal_rules"]:
+        if any(word.casefold() in text for word in rule.get("keywords", [])):
+            add(rule["id"], rule["severity"], rule["description"])
+    return {"findings": findings,
+            "has_high_risk": any(f["severity"] == "high" for f in findings)}
