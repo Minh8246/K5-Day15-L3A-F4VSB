@@ -86,6 +86,38 @@ Mở `http://127.0.0.1:3000`, dán một SMS hoặc chọn tin nhắn mẫu, r�
 
 Nếu Python không nằm trên `PATH`, đặt `PYTHON_BIN` thành đường dẫn tuyệt đối tới trình chạy Python. Web mặc định dùng `python` trên Windows và `python3` trên macOS/Linux. Để chạy bản build, dùng `npm run build` rồi `npm start` trong `web/`. Máy chạy web cần có cả Node.js, Python và các thư mục `codebase/`, `data/` của repo.
 
+### Deploy bằng Docker Compose và Cloudflare Tunnel
+
+Chạy từ gốc repo dưới user `proj2` trên VPS. Cần Docker rootless và Docker Compose từ 2.24. Khi chưa có `.env.deploy`, ứng dụng chạy ở chế độ giả.
+
+```bash
+docker compose up -d --build --wait
+docker compose ps
+docker compose exec -T app node -e "fetch('http://127.0.0.1:8080/health').then(r=>r.text()).then(console.log)"
+```
+
+Trong Cloudflare Tunnel, cấu hình hostname `kiemtrasms.online` với service `http://app:8080`. Khi chuyển địa chỉ web sang tunnel, thay các bản ghi A của trang đỗ GoDaddy ở tên miền gốc bằng bản ghi do tunnel tạo. App nhận lưu lượng từ tunnel qua mạng Compose nội bộ.
+
+Chạy `umask 077` trước khi tạo file cấu hình trên VPS. Tạo `.env.tunnel` với dòng `TUNNEL_TOKEN=` và điền token tunnel. Khi bật DeepSeek, sao chép `.env.example` thành `.env.deploy` và điền cấu hình model thật. Kiểm tra quyền của hai file là `600`.
+
+```bash
+docker compose --profile tunnel up -d --build --wait
+docker compose --profile tunnel logs --tail 50 tunnel
+curl -fsS https://kiemtrasms.online/health
+```
+
+Bật giới hạn request cho `/api/analyze` trên Cloudflare trước khi chạy DeepSeek thật. Sau khi deploy, mở trang trên tên miền và kiểm tra một SMS mẫu trên giao diện.
+
+### Cập nhật qua GitHub
+
+1. Làm việc trên nhánh riêng rồi mở pull request vào `main`. Chờ kiểm tra **CI** qua trước khi merge.
+2. Muốn lên VPS, mở pull request từ `main` vào `deloy`. Chờ **CI** qua rồi merge.
+3. VPS kiểm tra nhánh `deloy` khoảng mỗi phút. Khi **CI** trên chính commit mới đã qua, VPS build image và cập nhật container web. Nếu bản mới khởi động lỗi, VPS thử khôi phục container trước đó.
+
+Xem lần deploy gần nhất bằng `journalctl --user -u f4vsb-deploy.service -n 30` dưới user `proj2`. Sau đó mở `https://kiemtrasms.online/health` để kiểm tra. Cấu hình DeepSeek và Cloudflare được lưu trong `~/f4vsb` trên VPS.
+
+Khi cài quy trình lần đầu trên VPS đã chạy F4VSB, sao chép `deploy/deploy.sh` vào `~/f4vsb/bin/` và hai tệp systemd vào `~/.config/systemd/user/`. Chạy `systemctl --user daemon-reload` rồi `systemctl --user enable --now f4vsb-deploy.timer`. Cập nhật các tệp tương ứng trên VPS nếu sửa quy trình deploy.
+
 ## Lệnh
 
 | Lệnh | Làm gì |

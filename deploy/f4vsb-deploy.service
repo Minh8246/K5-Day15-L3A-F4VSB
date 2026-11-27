@@ -1,0 +1,9 @@
+[Unit]
+Description=Deploy F4VSB from GitHub
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash %h/f4vsb/bin/deploy.sh
+TimeoutStartSec=15min

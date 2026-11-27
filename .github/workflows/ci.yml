@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main, deloy]
+  push:
+    branches: [main, deloy]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Kiểm tra benchmark và metric
+        run: python3 run.py check
+      - name: Build và chạy thử Docker
+        run: |
+          docker compose up -d --build --wait app
+          printf '%s\n' '{"message":"VCB: Vui long xac minh tai khoan tai https://example.invalid"}' \
+            | docker compose exec -T app python3 analyze_sms.py \
+            | grep -q '"model": "fake"'
+      - name: In log khi kiểm thử lỗi
+        if: failure()
+        run: docker compose logs --tail 50 app
