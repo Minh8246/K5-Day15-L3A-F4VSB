@@ -30,7 +30,7 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): chưa dùn
 
 - **Quy mô pain của hướng chọn / tháng:** giả sử 100 người dùng mục tiêu *(tự ước tính)* × 2/3 có nhận tin trong tháng (P1–P3; làm tròn 67 người) × 2,5 lần/người có nhận (P2 ~2, P3 ~3) × 20 phút/lần *(tự ước tính từ P2 ~10–15 phút, P3 ~30 phút)* ≈ **3.350 phút, tức 56 giờ kiểm tra/100 người/tháng**. Đây là phép ngoại suy minh họa từ mẫu rất nhỏ, gộp SMS và Zalo; chưa đo số phút sản phẩm tiết kiệm được.
 - Hướng đã loại: chỉ đưa hướng dẫn mở app vì chưa giải quyết được thời gian P2 phải tự đối chiếu; tự đọc/chặn SMS vì vượt lát cắt và lỗi chặn nhầm có thể gây hại.
-- Số lần/tháng quan sát được: P1 0, P2 khoảng 2, P3 khoảng 3 (gộp SMS/Zalo). Chưa có cơ sở để gán tỉ lệ persona ở quy mô thật; `cost/personas.yaml` vẫn là số mẫu cần thay trước CP4.
+- Số lần/tháng quan sát được: P1 0, P2 khoảng 2, P3 khoảng 3 (gộp SMS/Zalo). Các tỷ trọng persona và quy mô 50/100/300 người trong `cost/personas.yaml` được ghi rõ là *(tự ước tính)* và đã mô phỏng 50 phiên thật ở `cost/simulate-1.csv` (§8).
 
 ## §3. Giải pháp tương tự *(guide 2.1)*
 - Tự mở ứng dụng ngân hàng để kiểm tra như P2 (`evidence/interviews/P2.md`): học cách xác minh trong kênh người dùng chủ động mở; cần tránh coi một SMS là thật chỉ vì tên người gửi quen. Bản chạy thử giúp chỉ ra dấu hiệu trong SMS và nhắc người dùng tự mở app, không thay việc xác minh trong app.
@@ -132,6 +132,7 @@ flowchart TD
 | 28/11/2026, 00:05 ICT | Làm rõ chú thích ảnh §0 chỉ minh họa bước tự xác minh, không phải bằng chứng pain hoặc hiệu quả AI. | Tránh suy diễn từ ảnh cài đặt VCB sang hành vi của P1–P3 hay kết quả bộ thử. |
 | 28/11/2026, 00:17 ICT | Nhận diện thao tác bị yêu cầu trong SMS và chạy lượt 2. | B10 chuyển từ lý do sai sang giải thích đăng nhập để nhận tiền. B02 đổi nhãn, được ghi trong báo cáo. |
 | 28/11/2026, 00:19 ICT | Mô phỏng 50 phiên với cấu hình Track E. | Dùng token API thật và tỷ lệ đạt lượt 2 để tính chi phí. |
+| 28/11/2026, 09:47 ICT | Hoàn thiện hồ sơ CP4: xóa Mục 0 hướng dẫn khung trong `README.md`, cập nhật câu tham chiếu `personas.yaml` ở §2, điền quy ước `AGENTS.md`, bổ sung khai báo AI & kết quả người thứ hai chấm thử 5 đầu ra (`B01`, `B02`, `B07`, `B10`, `B16`, khớp 5/5) ở `eval/README.md` và `docs/ai-usage.md`. | Đồng bộ hồ sơ và hoàn thiện kiểm định chéo Rubric R4 trước CP4; không sửa chuẩn "đạt", câu thử, số bằng chứng hay kết quả các lượt đã chạy. |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 

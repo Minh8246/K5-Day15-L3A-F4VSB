@@ -1,4 +1,3 @@
-> Đây là khung repo nộp bài. Điền mọi chỗ `____`, giữ nguyên tên các mục. **Mục 0 xoá đi sau khi tạo repo xong.**
 > Giờ, mốc, luật, rubric: xem `README.md`, `02-guide.md`, `03-rubric.md` trong repo đề (bộ đề BTC phát).
 
 # F4VSB — Đánh giá rủi ro SMS ngân hàng và ví điện tử
@@ -6,30 +5,6 @@
 **Thành viên, lớp, track:** xem [TEAMS.md](TEAMS.md). **Điền TEAMS.md đúng format**: khi chấm và đánh giá, BTC quét file này để ghép điểm cho từng người.
 
 *Lát cắt = phần nhỏ nhất làm xong được trong hackathon: một người dùng · một việc · một quyết định AI · một kết quả.*
-
----
-
-## 0. Tạo repo nhóm từ khung này *(guide bước 1.0 — xoá mục này khi xong)*
-
-**Hai luật:** repo **mới, công khai (Public)** · tên `K5-Day15-<lớp>-<tên nhóm>`, vd `K5-Day15-L3A-StudyPulse` (tên nhóm viết liền, không dấu). Chép **nội dung bên trong** `starter-repo/` — `README.md`, `run.py` phải nằm ngay ở trang đầu repo.
-
-**(a) Không cần terminal — làm trên web GitHub**
-1. **New repository** → tên theo mẫu → **Public** → không tick thêm gì → tạo.
-2. Trên máy mở thư mục `starter-repo/`, **bật hiện file ẩn** (Mac Finder: `Cmd + Shift + .` · Windows: View → Show → Hidden items) để thấy `.gitignore`, `.env.example`.
-3. Trên repo vừa tạo: **Add file → Upload files** → **kéo thả** tất cả file và thư mục bên trong `starter-repo/` → **Commit changes**. Kéo thả mới giữ được thư mục con; lỗi vì nhiều file quá thì tải từng thư mục.
-4. Kiểm: có `.gitignore` chưa (hay thiếu nhất). Thiếu thì **Add file → Create new file**, tên `.gitignore`, dán nội dung từ máy.
-5. Từ giờ sửa file ngay trên web (biểu tượng bút chì → Commit). Phần code vẫn cần **một** người chạy được trên máy: trước mỗi lượt chạy tải **Code → Download ZIP** về thư mục mới (mang `.env` sang), chạy xong chỉ upload file kết quả và file vừa sửa; trong lúc đang chạy không ai sửa `eval/benchmark.csv` trên web.
-
-**(b) Dùng git**
-```bash
-git clone https://github.com/<tai-khoan>/K5-Day15-L3A-TenNhom.git
-cd K5-Day15-L3A-TenNhom
-cp -R ../duong-dan-toi/starter-repo/. .      # Windows PowerShell: Copy-Item -Recurse -Force ..\duong-dan-toi\starter-repo\* .
-git status                                   # không được có .env, data-btc/
-git add -A && git commit -m "Khung repo từ starter-repo" && git push
-```
-
-**Xong khi:** mở link repo bằng **cửa sổ ẩn danh** thấy được file (link nộp CP1) · đã mời thành viên (Settings → Collaborators) · đã điền `TEAMS.md` và `python run.py check` không báo gì ở phần "Kiểm TEAMS.md".
 
 ---
 
@@ -154,8 +129,9 @@ Nhóm dùng stack khác (Node, Streamlit, notebook…): sửa hàm `run_app()` t
 
 | Thành phần | Thật / Giả | Ghi chú |
 |---|---|---|
-| Lời gọi AI ở quyết định trung tâm | **Thật** khi cấu hình `.env` | `deepseek-flash` phân loại theo tín hiệu đã kiểm. |
-|  |  |  |
+| Lời gọi AI ở quyết định trung tâm | **Thật** khi cấu hình `.env` | `deepseek-flash` phân loại theo tín hiệu đã kiểm (chưa có `.env` thì fallback chế độ `fake`). |
+| Danh bạ kênh chính thức & quy tắc SMS | **Thật** (cục bộ) | 10 ngân hàng/ví công khai trong `data/official_channels.json` và bộ quy tắc trong `data/domain_rules.json`. |
+| Truy cập hộp thư SMS / thao tác tài khoản | **Không làm** | Ngoài lát cắt; người dùng tự dán SMS đã ẩn danh và tự xác minh qua app/kênh chính thức. |
 
 ## Dùng AI vào việc gì
 
