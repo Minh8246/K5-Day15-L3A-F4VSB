@@ -3,8 +3,15 @@ import ipaddress
 import json
 import os
 import re
+from functools import cache
 from urllib.parse import urlsplit
 
+from domain_security import (
+    belongs_to,
+    decode_hostname,
+    find_lookalike_domain,
+    hostname_labels,
+)
 from tracing import tool
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
@@ -14,6 +21,17 @@ NEGATED_REQUEST = re.compile(r"\b(?:đừng|chớ|không(?:\s+(?:được|nên|c
 def _data(name):
     with open(os.path.join(DATA_DIR, name), encoding="utf-8") as handle:
         return json.load(handle)
+
+
+@cache
+def _homograph_references() -> tuple[str, ...]:
+    financial_domains = [
+        domain
+        for item in _data("official_channels.json")["organizations"]
+        for domain in item["official_domains"]
+    ]
+    additional_domains = [item["domain"] for item in _data("homograph_domains.json")["domains"]]
+    return tuple(financial_domains + additional_domains)
 
 
 @tool
@@ -56,16 +74,26 @@ def check_domain_rules(signals: dict, official: dict) -> dict:
         if code not in {entry["id"] for entry in findings}:
             findings.append({"id": code, "severity": severity, "reason": reason})
 
-    domains = [d.casefold() for d in official.get("official_domains", [])]
+    domains = [d.lower() for d in official.get("official_domains", [])]
     shorteners = next(r["shortener_domains"] for r in rules["domain_rules"] if r["id"] == "R_SHORTENER")
     suspect_tlds = next(r["suspicious_tlds"] for r in rules["domain_rules"] if r["id"] == "R_SUSPICIOUS_TLD")
     for url in signals.get("urls", []):
         try:
             parsed = urlsplit(url if "://" in url else "https://" + url)
-            host = (parsed.hostname or "").rstrip(".").casefold()
+            labels = hostname_labels(parsed.hostname or "")
         except ValueError:
             continue
-        official_host = any(host == d or host.endswith("." + d) for d in domains)
+        decoded_host = decode_hostname(labels)
+        host = decoded_host or ".".join(labels)
+        official_host = bool(decoded_host) and any(belongs_to(host, domain) for domain in domains)
+        lookalike = ""
+        if not decoded_host.isascii():
+            lookalike = find_lookalike_domain(decoded_host, _homograph_references())
+        if lookalike:
+            add("R_DOMAIN_HOMOGRAPH", "high",
+                f"Tên miền trong SMS dùng ký tự trông giống {lookalike}.")
+        elif any(label.startswith("xn--") for label in labels):
+            add("R_PUNYCODE", "low", "Tên miền có nhãn bắt đầu bằng xn-- (Punycode).")
         if host in shorteners:
             add("R_SHORTENER", "high", "URL rút gọn che tên miền đích.")
         try:
@@ -75,8 +103,6 @@ def check_domain_rules(signals: dict, official: dict) -> dict:
             pass
         if parsed.scheme == "http":
             add("R_NO_HTTPS", "medium", "URL dùng http thay vì https.")
-        if "xn--" in host:
-            add("R_PUNYCODE", "high", "Tên miền có mã punycode cần xác minh.")
         if not official_host and any(host.endswith(tld) for tld in suspect_tlds):
             add("R_SUSPICIOUS_TLD", "medium", "Đuôi tên miền cần kiểm tra thêm.")
         if domains and not official_host:

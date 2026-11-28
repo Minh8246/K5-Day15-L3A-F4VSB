@@ -36,8 +36,13 @@
     },
     {
       "id": "R_PUNYCODE",
+      "severity": "low",
+      "description": "Tên miền quốc tế ở dạng Punycode (xn--). Đây là thông tin về cách biểu diễn tên miền."
+    },
+    {
+      "id": "R_DOMAIN_HOMOGRAPH",
       "severity": "high",
-      "description": "Tên miền chứa mã punycode (xn--) có nguy cơ giả mạo bằng ký tự đồng dạng (homograph)."
+      "description": "Tên miền Unicode khác tên miền tham chiếu nhưng có dạng ký tự dễ nhầm theo dữ liệu Unicode."
     },
     {
       "id": "R_SUSPICIOUS_TLD",
