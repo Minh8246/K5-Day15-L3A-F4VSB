@@ -40,6 +40,6 @@ Khung chỉ dùng thư viện chuẩn của Python. Thêm thư viện thì ghi v
 
 ## Quy ước của nhóm
 
-- Ngôn ngữ trả lời người dùng: __
-- Phong cách code / đặt tên: __
-- Ai duyệt thay đổi do agent tạo trước khi commit: __
+- Ngôn ngữ trả lời người dùng: Tiếng Việt (ngắn gọn, rõ căn cứ, không khẳng định SMS an toàn tuyệt đối).
+- Phong cách code / đặt tên: Python theo chuẩn PEP 8, chỉ dùng thư viện chuẩn trong `codebase/`; nhánh git đặt theo `<ten>/<muc>` hoặc `feat/<muc>`, không commit `.env`.
+- Ai duyệt thay đổi do agent tạo trước khi commit: thành viên phụ trách phần file tương ứng kiểm tra đầu ra và Đội trưởng Nguyễn Công Quân duyệt Pull Request vào `main` sau khi CI pass.
