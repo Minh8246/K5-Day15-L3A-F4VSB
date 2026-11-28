@@ -31,13 +31,16 @@ def answer(text: str) -> dict:
         return {"output": "CHƯA ĐỦ CĂN CỨ: Hãy dán nội dung một SMS đã che thông tin cá nhân để kiểm tra."}
     official = lookup_official_channels(signals["organization"])
     checked = check_domain_rules(signals, official)
-    context = json.dumps({"organization": official, "findings": checked["findings"],
+    risk_findings = [
+        finding for finding in checked["findings"] if finding["severity"] in {"medium", "high"}
+    ]
+    context = json.dumps({"organization": official, "findings": risk_findings,
                           "has_sender": bool(signals["sender"]), "has_url": bool(signals["urls"])},
                          ensure_ascii=False)
     model = call_model(SYSTEM, "Dữ kiện đã kiểm: " + context)
     # Giữ cảnh báo khi quy tắc đã tìm thấy căn cứ mạnh. Model đánh giá những tín hiệu còn lại.
     high = checked["has_high_risk"] or (
-        bool(checked["findings"]) and model["text"] == HIGH_RISK
+        bool(risk_findings) and model["text"] == HIGH_RISK
     )
     label = "CÓ DẤU HIỆU RỦI RO CAO" if high else "CHƯA ĐỦ CĂN CỨ ĐỂ KẾT LUẬN AN TOÀN"
     reasons = ["[%s] %s" % (f["id"], f["reason"]) for f in checked["findings"]]

@@ -22,8 +22,14 @@
 |---|---|
 | Dùng để làm gì | Nguồn quy tắc tất định cho công cụ `check_domain_rules` và `extract_message_signals` chuyên sâu cho tin nhắn SMS (phát hiện link rút gọn, IP trần, HTTP không mã hóa, punycode, đuôi tên miền rủi ro cao, giả mạo thương hiệu trong subdomain/lookalike, tệp `.apk`, đầu số di động cá nhân giả danh ngân hàng, bẫy trạm BTS giả mạo SMS Brandname, và từ khóa đòi OTP/chuyển tiền/đổi điểm thưởng/cập nhật sinh trắc học). |
 | Từ đâu | Nhóm tự biên soạn dựa trên khuyến cáo cảnh báo lừa đảo SMS Brandname của các ngân hàng/ví điện tử tại Việt Nam (không thu thập dữ liệu cá nhân). |
-| Xử lý những bước gì | Phân tách thành 3 nhóm quy tắc độc lập: `domain_rules` (8 quy tắc URL/tên miền), `sms_sender_rules` (3 quy tắc đặc thù người gửi SMS gồm số di động cá nhân, Brandname biến tấu, và cảnh báo fake BTS), và `content_signal_rules` (4 nhóm tín hiệu nội dung SMS). |
-| Số dòng / số đoạn | 8 quy tắc tên miền/URL + 3 quy tắc người gửi SMS + 4 nhóm quy tắc tín hiệu nội dung + 2 ghi chú bảo mật. |
+| Xử lý những bước gì | Phân tách thành 3 nhóm quy tắc độc lập: `domain_rules` (9 quy tắc URL/tên miền), `sms_sender_rules` (3 quy tắc đặc thù người gửi SMS gồm số di động cá nhân, Brandname biến tấu, và cảnh báo fake BTS), và `content_signal_rules` (4 nhóm tín hiệu nội dung SMS). |
+| Số dòng / số đoạn | 9 quy tắc tên miền/URL + 3 quy tắc người gửi SMS + 4 nhóm quy tắc tín hiệu nội dung + 2 ghi chú bảo mật. |
 | Phiên bản / ngày lấy | `0.4-cp4-sms` · 28/11/2026. Hai quy tắc về thông tin xác thực và chuyển tiền dùng mẫu yêu cầu có ngữ cảnh. Công cụ bỏ qua mẫu yêu cầu bị phủ định ngay trước động từ. |
 | Nhãn | nhóm tự biên soạn (quy tắc kiểm tra tất định, không phải bằng chứng pain). |
 | Giới hạn | Quy tắc từ khóa và danh sách TLD/link rút gọn có thể bỏ sót thủ đoạn biến tấu chữ mới hoặc cảnh báo thận trọng với SMS quảng cáo hợp lệ có dùng link rút gọn. Vì vậy hệ thống luôn nêu rõ từng quy tắc bị kích hoạt và hướng dẫn người dùng tự kiểm tra qua ứng dụng/hotline chính thức, không tự khẳng định 100%. |
+
+## Dataset 3 · Ký tự đồng hình và tên miền tham chiếu
+
+`unicode-confusables.txt` chứa [bảng ánh xạ ký tự dễ nhầm của Unicode 18.0.0](https://www.unicode.org/Public/18.0.0/security/confusables.txt), kèm điều khoản trong `LICENSE-Unicode.txt`. Công cụ giải mã các nhãn Punycode, chuẩn hóa Unicode và áp dụng bảng ánh xạ theo từng nhãn tên miền.
+
+Công cụ so sánh với tên miền ngân hàng và ví điện tử đã có trong danh bạ cùng các tên miền tham chiếu bổ sung trong `homograph_domains.json`. Danh sách bổ sung hiện có `apple.com` để phát hiện trường hợp Apple bị giả mạo bằng ký tự đồng hình. Phạm vi cảnh báo phụ thuộc vào danh sách tên miền tham chiếu và các ánh xạ trong bảng Unicode.
